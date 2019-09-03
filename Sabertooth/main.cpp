@@ -1,0 +1,223 @@
+#include "System.h"
+
+#include "stb_image.h"
+
+#define EXIT_FAILURE -1
+#define EXIT_SUCCESS 0
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow *window);
+
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+int main() {
+
+	
+
+	if (!glfwInit()) {
+		fprintf(stderr, "ERROR: could not start GLFW3\n");
+		return 1;
+	}
+	/* Caso necessário, definições específicas para SOs, p. e. Apple OSX *
+	/* Definir como 3.2 para Apple OS X */
+	/*glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
+	GLFWwindow *g_window = glfwCreateWindow(
+		640, 480, "Teste de versão OpenGL", NULL, NULL);
+	if (!g_window) {
+		fprintf(stderr, "ERROR: could not open window with GLFW3\n");
+		glfwTerminate();
+		return 1;
+	}
+
+	glfwMakeContextCurrent(g_window);
+	// inicia manipulador da extensão GLEW
+	glewExperimental = GL_TRUE;
+	glewInit();
+
+	float vertices[] = {
+		// positions          // colors           // texture coords
+		0.7f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		0.7f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		-0.7f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		-0.7f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+	};
+	unsigned int indices[] = {
+		0, 1, 3, // first triangle
+		1, 2, 3  // second triangle
+	};
+	unsigned int VBO, VAO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	//Shader ourShader("4.1.texture.vs", "4.1.texture.fs");
+	
+	const char* vertex_shader =
+		"#version 410 core\n"
+		"layout(location = 0) in vec3 aPos;"
+		"layout(location = 1) in vec3 aColor;"
+		"layout(location = 2) in vec2 aTexCoord;"
+
+		"out vec3 ourColor;"
+		"out vec2 TexCoord;"
+
+		"void main(){"
+			"gl_Position = vec4(aPos, 1.0);"
+			"ourColor = aColor;"
+			"TexCoord = aTexCoord;"
+		"}";
+
+	const char* fragment_shader =
+		"#version 410 core\n"
+		"out vec4 FragColor;"
+
+		"in vec3 ourColor;"
+		"in vec2 TexCoord;"
+
+		// texture sampler
+		"uniform sampler2D texture1;"
+
+		"void main(){"
+			"FragColor = texture(texture1, TexCoord);"
+		"}";
+
+	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, &vertex_shader, NULL);
+	glCompileShader(vs);
+	// identifica fs e o associa com fragment_shader
+	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, &fragment_shader, NULL);
+	glCompileShader(fs);
+	// identifica do programa, adiciona partes e faz "linkagem"
+	GLuint shader_programme = glCreateProgram();
+	glAttachShader(shader_programme, fs);
+	glAttachShader(shader_programme, vs);
+	glLinkProgram(shader_programme);
+
+
+
+	unsigned int texture, texture2;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+										   // set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+	int width, height, nrChannels;
+	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+	unsigned char *data = stbi_load("bin/Images/ceu2.jpg", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	// texture 2
+	// ---------
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+	data = stbi_load("bin/Images/aviao.png", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	stbi_image_free(data);
+
+	glUseProgram(shader_programme);
+
+	while (!glfwWindowShouldClose(g_window))
+	{
+		// input
+		// -----
+		processInput(g_window);
+
+		// render
+		// ------
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glUseProgram(shader_programme);
+		// bind Texture
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		// render container
+		//ourShader.use();
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+		// -------------------------------------------------------------------------------
+		glfwSwapBuffers(g_window);
+		glfwPollEvents();
+	}
+
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+
+	// encerra contexto GL e outros recursos da GLFW
+	glfwTerminate();
+	return 0;
+
+}
+
+void processInput(GLFWwindow *window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+}
