@@ -13,7 +13,6 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 int main() {
-
 	
 
 	if (!glfwInit()) {
@@ -50,6 +49,7 @@ int main() {
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
 	};
+	
 	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -75,6 +75,13 @@ int main() {
 
 	//Shader ourShader("4.1.texture.vs", "4.1.texture.fs");
 	
+	float matrix[] = {
+		1.0f, 0.0f, 0.0f, 0.0f, // 1ª coluna
+		0.0f, 1.0f, 0.0f, 0.0f, // 2ª coluna
+		0.0f, 0.0f, 1.0f, 0.0f, // 3ª coluna
+		0.25f, 0.25f, 0.0f, 1.0f // 4ª coluna
+	};
+
 	const char* vertex_shader =
 		"#version 410 core\n"
 		"layout(location = 0) in vec3 aPos;"
@@ -84,10 +91,12 @@ int main() {
 		"out vec3 ourColor;"
 		"out vec2 TexCoord;"
 
+		"uniform mat4 matrix;"
+
 		"void main(){"
-			"gl_Position = vec4(aPos, 1.0);"
+			"gl_Position = matrix * vec4(aPos, 1.0);"
 			"ourColor = aColor;"
-			"TexCoord = aTexCoord;"
+			"TexCoord = vec2(aTexCoord.x, aTexCoord.y);"
 		"}";
 
 	const char* fragment_shader =
@@ -99,9 +108,10 @@ int main() {
 
 		// texture sampler
 		"uniform sampler2D texture1;"
+		"uniform sampler2D texture2;"
 
 		"void main(){"
-			"FragColor = texture(texture1, TexCoord);"
+			"FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);"
 		"}";
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -119,9 +129,9 @@ int main() {
 
 
 
-	unsigned int texture, texture2;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+	unsigned int texture1, texture2;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 										   // set the texture wrapping parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -154,8 +164,10 @@ int main() {
 	// set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 	// load image, create texture and generate mipmaps
-	data = stbi_load("bin/Images/aviao.png", &width, &height, &nrChannels, 0);
+
+	data = stbi_load("bin/Images/aviao.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
@@ -170,6 +182,14 @@ int main() {
 	stbi_image_free(data);
 
 	glUseProgram(shader_programme);
+	glUniform1i(glGetUniformLocation(shader_programme, "texture1"), 0);
+
+	int matrixLocation = glGetUniformLocation(shader_programme, "matrix");
+	glUseProgram(shader_programme);
+	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
+
+	float speed = 1.0f;
+	float lastPosition = 0.0f;
 
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -181,10 +201,30 @@ int main() {
 		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		static double previousSeconds = glfwGetTime();
+		double currentSeconds = glfwGetTime();
+		double elapsedSeconds =
+			currentSeconds - previousSeconds;
+		previousSeconds = currentSeconds;
+		if (fabs(lastPosition) > 1.5f) {
+			matrix[12] = -1.5;
+			lastPosition = matrix[12];
+		}
+		else {
+			matrix[12] = elapsedSeconds * speed +
+				lastPosition;
+			lastPosition = matrix[12];
+		}
+
+		glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
 		
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
 		glUseProgram(shader_programme);
-		// bind Texture
-		glBindTexture(GL_TEXTURE_2D, texture);
 
 		// render container
 		//ourShader.use();
