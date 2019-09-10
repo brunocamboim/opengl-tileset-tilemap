@@ -38,22 +38,22 @@ int main() {
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	
+	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
 
 	float vertices[] = {
 		// positions          // colors           // texture coords
-		0.7f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		0.7f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		-0.7f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		-0.7f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+		0.0f,  600.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		800.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		800.0f,  600.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
 	};
 
 	float vertices1[] = {
 		// positions          // colors           // texture coords
-		0.3f,  0.1f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		0.3f, -0.1f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		-0.0f, -0.1f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		-0.0f,  0.1f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+		0.0f,  600.0f, 1.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		800.0f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		0.0f, 0.0f, 1.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		800.0f,  600.0f, 1.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
 	};
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
@@ -126,10 +126,10 @@ int main() {
 		"out vec3 ourColor;"
 		"out vec2 TexCoord;"
 
-		"uniform mat4 matrix;"
+		"uniform mat4 proj; "
 
 		"void main(){"
-			"gl_Position = matrix * vec4(aPos, 1.0);"
+			"gl_Position = proj * vec4(aPos, 1.0);"
 			"ourColor = aColor;"
 			"TexCoord = vec2(aTexCoord.x, aTexCoord.y);"
 		"}";
@@ -219,9 +219,12 @@ int main() {
 	glUseProgram(shader_programme);
 	glUniform1i(glGetUniformLocation(shader_programme, "texture1"), 0);
 
-	int matrixLocation = glGetUniformLocation(shader_programme, "matrix");
-	glUseProgram(shader_programme);
-	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
+	//int matrixLocation = glGetUniformLocation(shader_programme, "matrix");
+	//glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
+
+	glUniformMatrix4fv(
+		glGetUniformLocation(shader_programme, "proj"), 1,
+		GL_FALSE, glm::value_ptr(projection));
 
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
