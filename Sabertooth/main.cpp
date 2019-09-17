@@ -147,7 +147,7 @@ int main() {
 
 		"void main(){"
 			"FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);"
-			"if (FragColor.a < 1) discard;"
+			"if (FragColor.a < 0.5) discard;"
 		"}";
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
