@@ -40,21 +40,36 @@ int main() {
 
 	glm::mat4 projection = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f);
 
-	float vertices[] = {
+	/*float vertices[] = {
 		// positions          // colors           // texture coords
 		640.0f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
 		640.0f, 480.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
 		0.0f, 480.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
 		0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+	};*/
+
+	float vertices[] = {
+		// positions          // colors           // texture coords
+		0.0f, 480.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // buttom right
+		0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // top left
+		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		640.0f, 480.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f //top right
 	};
 
 	float vertices1[] = {
+		0.0f, 480.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // buttom right
+		0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // top left
+		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		640.0f, 480.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f //top right
+	};
+
+	/*float vertices1[] = {
 		// positions          // colors           // texture coords
 		400.0f,  200.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
 		400, 100.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
 		200.0f, 100.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
 		200.0f, 200.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
-	};
+	};*/
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
@@ -177,7 +192,7 @@ int main() {
 	// load image, create texture and generate mipmaps
 	int width, height, nrChannels;
 	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data = stbi_load("bin/Images/ceu2.jpg", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	unsigned char *data = stbi_load("bin/Images/ceu.jpg", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -202,7 +217,7 @@ int main() {
 
 	// load image, create texture and generate mipmaps
 
-	data = stbi_load("bin/Images/aviao.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	data = stbi_load("bin/Images/casas.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
