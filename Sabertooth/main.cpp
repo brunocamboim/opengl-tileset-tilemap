@@ -70,6 +70,13 @@ int main() {
 		640.0f, 480.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f //top right
 	};
 
+	float vertices3[] = {
+		0.0f, 480.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // buttom right
+		0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // top left
+		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		640.0f, 480.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f //top right
+	};
+
 	/*float vertices1[] = {
 		// positions          // colors           // texture coords
 		400.0f,  200.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
@@ -151,6 +158,29 @@ int main() {
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+	unsigned int VBO4, VAO4, EBO4;
+	glGenVertexArrays(1, &VAO4);
+	glGenBuffers(1, &VBO4);
+	glGenBuffers(1, &EBO4);
+
+	glBindVertexArray(VAO4);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO4);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO3);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
 	//Shader ourShader("4.1.texture.vs", "4.1.texture.fs");
 	
 	float matrix[] = {
@@ -209,7 +239,7 @@ int main() {
 	glLinkProgram(shader_programme);
 
 
-	unsigned int texture1, texture2, texture3;
+	unsigned int texture1, texture2, texture3, texture4;
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 										   // set the texture wrapping parameters
@@ -261,7 +291,7 @@ int main() {
 
 	stbi_image_free(data);
 
-	// texture 2
+	// texture 3
 	// ---------
 	glGenTextures(1, &texture3);
 	glBindTexture(GL_TEXTURE_2D, texture3);
@@ -275,6 +305,33 @@ int main() {
 	// load image, create texture and generate mipmaps
 
 	data = stbi_load("bin/Images/calcada-edit.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	if (data)
+	{
+		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	stbi_image_free(data);
+
+	// texture 4
+	// ---------
+	glGenTextures(1, &texture4);
+	glBindTexture(GL_TEXTURE_2D, texture4);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// load image, create texture and generate mipmaps
+
+	data = stbi_load("bin/Images/rua-edit.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
@@ -341,6 +398,10 @@ int main() {
 
 		glBindVertexArray(VAO3);
 		glBindTexture(GL_TEXTURE_2D, texture3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		glBindVertexArray(VAO4);
+		glBindTexture(GL_TEXTURE_2D, texture4);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(g_window);
