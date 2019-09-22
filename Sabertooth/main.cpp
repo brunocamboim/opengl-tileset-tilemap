@@ -13,6 +13,49 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+float TELA_X = 640.0f;
+float TELA_Y = 480.0f;
+float CENTRO_X = TELA_X / 2;
+float CENTRO_Y = TELA_Y / 2;
+
+int sprite_direction = 0;
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+// actions are GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
+{
+	sprite_direction = 2;
+	if (key == GLFW_KEY_LEFT)
+	{
+		if (action == GLFW_REPEAT)
+		{
+			sprite_direction = 0;
+		}
+		else if (action == GLFW_PRESS) {
+			sprite_direction = 1;
+		}
+		else {
+			sprite_direction = 2;
+		}
+	}
+	else if (key == GLFW_KEY_RIGHT)
+	{
+		if (action == GLFW_REPEAT)
+		{
+			sprite_direction = 4;
+		}
+		else if (action == GLFW_PRESS)
+		{
+			sprite_direction = 3;
+		}
+		else {
+			sprite_direction = 2;
+		}
+	}
+	else if (key == GLFW_KEY_SPACE)
+	{
+		//ally_shoot = 1;
+	}
+}
 
 
 int main() {
@@ -91,13 +134,6 @@ int main() {
 		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
 	};
 
-	/*float vertices1[] = {
-		// positions          // colors           // texture coords
-		400.0f,  200.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		400, 100.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		200.0f, 100.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		200.0f, 200.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
-	};*/
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
@@ -437,7 +473,7 @@ int main() {
 	//int matrixLocation = glGetUniformLocation(shader_programme, "matrix");
 	//glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
 	
-	glm::mat4 proj = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(0.0f, TELA_X, TELA_Y, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(
 		glGetUniformLocation(shader_programme, "proj"), 1,
 		GL_FALSE, glm::value_ptr(proj));
@@ -447,22 +483,38 @@ int main() {
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
 
+	float layers[5];
+	layers[0] = texture1;
+	layers[1] = texture2;
+	layers[2] = texture3;
+	layers[3] = texture4;
+	layers[4] = texture5;
+
+	float layersZ[5];
+	layersZ[0] = -1.0;
+	layersZ[1] = -1.0;
+	layersZ[2] = -0.9;
+	layersZ[3] = -0.8;
+	layersZ[4] = -0.7;
+
+	float vao[5];
+	vao[0] = VAO;
+	vao[1] = VAO2;
+	vao[2] = VAO3;
+	vao[3] = VAO4;
+	vao[4] = VAO5;
+
+
 	float movimentoCeu = 0.5;
 	float movimentoCarro = 0.5;
 	while (!glfwWindowShouldClose(g_window))
 	{
-		// input
-		// -----
 		processInput(g_window);
 
-		// render
-		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-
 		
-		static double previousSeconds = glfwGetTime();
+		/*static double previousSeconds = glfwGetTime();
 		double currentSeconds = glfwGetTime();
 		double elapsedSeconds =
 			currentSeconds - previousSeconds;
@@ -476,78 +528,46 @@ int main() {
 				lastPosition;
 			lastPosition = matrix[12];
 		}
+		glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);*/
 		
+		for (int i = 0; i < 5; i++) {
 
-		
-		//glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
-		
-		glBindVertexArray(VAO);
-		
-		movimentoCeu += 0.15 * 0.0009f;
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), movimentoCeu);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), -1.0);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-		glBindTexture(GL_TEXTURE_2D, texture1);
-		glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		
-		
-		glBindVertexArray(VAO2);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), -0.9);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(vao[i]);
 
-		glBindVertexArray(VAO3);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), -0.8);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-		glBindTexture(GL_TEXTURE_2D, texture3);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			if (i == 0) {
 
-		glBindVertexArray(VAO4);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), -0.7);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-		glBindTexture(GL_TEXTURE_2D, texture4);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				movimentoCeu += 0.15 * 0.0009f;
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "offsetx"), movimentoCeu);
 
-		glBindVertexArray(VAO5);
-		movimentoCarro += 0.7 * 0.0009f;
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), movimentoCarro);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), -0.6);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1.0);
-		glBindTexture(GL_TEXTURE_2D, texture5);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			} else if (i == 4) {
+			
+				movimentoCarro += 0.7 * 0.0009f;
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "offsetx"), movimentoCarro);
+
+			} else {
+			
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "offsetx"), 1);
+
+			}
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsety"), 1);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "layer_z"), layersZ[i]);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1);
+			glBindTexture(GL_TEXTURE_2D, layers[i]);
+			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		}
 
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();
+
 	}
 
 	glDeleteVertexArrays(1, &VAO);
@@ -557,6 +577,18 @@ int main() {
 	glDeleteVertexArrays(1, &VAO2);
 	glDeleteBuffers(1, &VBO2);
 	glDeleteBuffers(1, &EBO2);
+
+	glDeleteVertexArrays(1, &VAO3);
+	glDeleteBuffers(1, &VBO3);
+	glDeleteBuffers(1, &EBO3);
+
+	glDeleteVertexArrays(1, &VAO4);
+	glDeleteBuffers(1, &VBO4);
+	glDeleteBuffers(1, &EBO4);
+
+	glDeleteVertexArrays(1, &VAO5);
+	glDeleteBuffers(1, &VBO5);
+	glDeleteBuffers(1, &EBO5);
 
 	// encerra contexto GL e outros recursos da GLFW
 	glfwTerminate();
