@@ -1,7 +1,9 @@
 #include "System.h"
 
-
 #include "stb_image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define EXIT_FAILURE -1
 #define EXIT_SUCCESS 0
@@ -17,43 +19,25 @@ float TELA_X = 640.0f;
 float TELA_Y = 480.0f;
 float CENTRO_X = TELA_X / 2;
 float CENTRO_Y = TELA_Y / 2;
+float Y_PLAYER = CENTRO_Y + 250.0f;
 
-int sprite_direction = 0;
+glm::mat4 matrix_origem = glm::mat4(1);
+glm::mat4 matrix_ally = glm::translate(glm::mat4(1), glm::vec3(0,0,0));
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 // actions are GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
 {
-	sprite_direction = 2;
 	if (key == GLFW_KEY_LEFT)
 	{
-		if (action == GLFW_REPEAT)
-		{
-			sprite_direction = 0;
-		}
-		else if (action == GLFW_PRESS) {
-			sprite_direction = 1;
-		}
-		else {
-			sprite_direction = 2;
-		}
+		
 	}
 	else if (key == GLFW_KEY_RIGHT)
 	{
-		if (action == GLFW_REPEAT)
-		{
-			sprite_direction = 4;
-		}
-		else if (action == GLFW_PRESS)
-		{
-			sprite_direction = 3;
-		}
-		else {
-			sprite_direction = 2;
-		}
+		
 	}
 	else if (key == GLFW_KEY_SPACE)
 	{
-		//ally_shoot = 1;
+
 	}
 }
 
@@ -83,16 +67,6 @@ int main() {
 	// inicia manipulador da extensão GLEW
 	glewExperimental = GL_TRUE;
 	glewInit();
-
-	
-
-	/*float vertices[] = {
-		// positions          // colors           // texture coords
-		640.0f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		640.0f, 480.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		0.0f, 480.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
-	};*/
 
 	float vertices[] = {
 		// positions          // colors           // texture coords
@@ -126,12 +100,20 @@ int main() {
 		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
 	};
 
-	float vertices4[] = {
+	/*float vertices4[] = {
 		// positions          // colors           // texture coords
 		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
 		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
 		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
 		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
+	};*/
+
+	float vertices4[] = {
+		// positions          // colors           // texture coords
+		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom left
+		0.0f, 350.0f, 0.0f,   1.0f, 0.0f, // top left
+		300.0f, 350.0f, 0.0f,   0.0f, 0.0f, // top right
+		300.0f, 480.0f, 0.0f,   0.0f, 1.0f //buttom right
 	};
 
 	unsigned int indices[] = {
@@ -243,51 +225,6 @@ int main() {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	//Shader ourShader("4.1.texture.vs", "4.1.texture.fs");
-	
-	float matrix[] = {
-		1.0f, 0.0f, 0.0f, 0.0f, // 1ª coluna
-		0.0f, 1.0f, 0.0f, 0.0f, // 2ª coluna
-		0.0f, 0.0f, 1.0f, 0.0f, // 3ª coluna
-		0.25f, 0.25f, 0.0f, 1.0f // 4ª coluna
-	};
-
-	//glm::mat4 projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
-
-	/*const char* vertex_shader =
-		"#version 410 core\n"
-		"layout(location = 0) in vec3 aPos;"
-		"layout(location = 1) in vec3 aColor;"
-		"layout(location = 2) in vec2 aTexCoord;"
-
-		"out vec3 ourColor;"
-		"out vec2 TexCoord;"
-
-		"uniform mat4 proj; "
-		
-
-		"void main(){"
-			"gl_Position = proj * vec4(aPos, 1.0);"
-			"ourColor = aColor;"
-			"TexCoord = vec2(aTexCoord.x, aTexCoord.y);"
-		"}";
-
-	const char* fragment_shader =
-		"#version 410 core\n"
-		"out vec4 FragColor;"
-
-		"in vec3 ourColor;"
-		"in vec2 TexCoord;"
-
-		// texture sampler
-		"uniform sampler2D texture1;"
-		"uniform sampler2D texture2;"
-
-		"void main(){"
-			"FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);"
-			"if (FragColor.a < 0.5) discard;"
-		"}";
-	*/
 
 	const char* vertex_shader =
 		"#version 410\n"
@@ -302,7 +239,7 @@ int main() {
 		
 		"void main () {"
 		"texture_coords = texture_mapping;"
-		"gl_Position = proj * vec4(vertex_position, layer_z, tamanho);"
+		"gl_Position = proj * matrix * vec4(vertex_position, layer_z, 1.0);"
 		"}";
 
 	const char* fragment_shader =
@@ -468,6 +405,8 @@ int main() {
 
 
 	glUseProgram(shader_programme);
+	glfwSetKeyCallback(g_window, key_callback);
+
 	glUniform1i(glGetUniformLocation(shader_programme, "texture1"), 0);
 
 	//int matrixLocation = glGetUniformLocation(shader_programme, "matrix");
@@ -478,7 +417,7 @@ int main() {
 		glGetUniformLocation(shader_programme, "proj"), 1,
 		GL_FALSE, glm::value_ptr(proj));
 
-	
+	matrix_ally = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0.0f));
 
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
@@ -491,11 +430,11 @@ int main() {
 	layers[4] = texture5;
 
 	float layersZ[5];
-	layersZ[0] = -1.0;
-	layersZ[1] = -1.0;
-	layersZ[2] = -0.9;
-	layersZ[3] = -0.8;
-	layersZ[4] = -0.7;
+	layersZ[0] = -0.50;
+	layersZ[1] = -0.49;
+	layersZ[2] = -0.48;
+	layersZ[3] = -0.47;
+	layersZ[4] = -0.46;
 
 	float vao[5];
 	vao[0] = VAO;
@@ -505,14 +444,14 @@ int main() {
 	vao[4] = VAO5;
 
 
-	float movimentoCeu = 0.5;
+	float movimentoCeu = 0.1;
 	float movimentoCarro = 0.5;
 	while (!glfwWindowShouldClose(g_window))
 	{
 		processInput(g_window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		/*static double previousSeconds = glfwGetTime();
 		double currentSeconds = glfwGetTime();
@@ -530,35 +469,48 @@ int main() {
 		}
 		glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);*/
 		
+		glUseProgram(shader_programme);
 		for (int i = 0; i < 5; i++) {
 
 			glBindVertexArray(vao[i]);
 
 			if (i == 0) {
 
-				movimentoCeu += 0.15 * 0.0009f;
+				movimentoCeu += 0.15 * 0.0001f;
 				glUniform1f(
 					glGetUniformLocation(shader_programme, "offsetx"), movimentoCeu);
+				glUniformMatrix4fv(
+					glGetUniformLocation(shader_programme, "matrix"), 1,
+					GL_FALSE, glm::value_ptr(glm::mat4(1)));
 
 			} else if (i == 4) {
-			
+
 				movimentoCarro += 0.7 * 0.0009f;
 				glUniform1f(
 					glGetUniformLocation(shader_programme, "offsetx"), movimentoCarro);
+
+				glUniformMatrix4fv(
+					glGetUniformLocation(shader_programme, "matrix"), 1,
+					GL_FALSE, glm::value_ptr(matrix_ally));
 
 			} else {
 			
 				glUniform1f(
 					glGetUniformLocation(shader_programme, "offsetx"), 1);
 
+				glUniformMatrix4fv(
+					glGetUniformLocation(shader_programme, "matrix"), 1,
+					GL_FALSE, glm::value_ptr(glm::mat4(1)));
 			}
 
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1);
 			glUniform1f(
 				glGetUniformLocation(shader_programme, "offsety"), 1);
 			glUniform1f(
 				glGetUniformLocation(shader_programme, "layer_z"), layersZ[i]);
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "tamanho"), 1);
+			
+
 			glBindTexture(GL_TEXTURE_2D, layers[i]);
 			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
