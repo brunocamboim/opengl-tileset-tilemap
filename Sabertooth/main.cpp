@@ -487,8 +487,9 @@ int main() {
 
 				movimentoCarro += 0.7 * 0.0009f;
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), movimentoCarro);
+					glGetUniformLocation(shader_programme, "offsetx"), 0);
 
+				matrix_ally = glm::translate(matrix_ally, glm::vec3(0.1, 0, 0.0f));
 				glUniformMatrix4fv(
 					glGetUniformLocation(shader_programme, "matrix"), 1,
 					GL_FALSE, glm::value_ptr(matrix_ally));
