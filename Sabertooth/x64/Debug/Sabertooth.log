@@ -1,31 +1,35 @@
 ﻿  main.cpp
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(8): warning C4005: 'EXIT_FAILURE': redefinição de macro
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdlib.h(49): note: consulte a definição anterior de 'EXIT_FAILURE'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(426): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(427): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(428): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(429): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(430): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(434): warning C4305: '=': truncamento de 'double' para 'float'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(435): warning C4305: '=': truncamento de 'double' para 'float'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(436): warning C4305: '=': truncamento de 'double' para 'float'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(437): warning C4305: '=': truncamento de 'double' para 'float'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(440): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(441): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(442): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(443): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(444): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(447): warning C4305: 'inicializando': truncamento de 'double' para 'float'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(475): warning C4244: 'argumento': conversão de 'float' para 'GLuint', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(488): warning C4305: '+=': truncamento de 'double' para 'float'
-c:\users\bruno\documents\opengl\opengl-trabalho-ga\sabertooth\main.cpp(515): warning C4244: 'argumento': conversão de 'float' para 'GLuint', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(8,1): warning C4005: 'EXIT_FAILURE': redefinição de macro
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h(49): message : consulte a definição anterior de 'EXIT_FAILURE'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(481,14): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(482,14): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(483,14): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(484,14): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(485,14): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(486,14): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(490,20): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(491,20): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(492,20): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(493,20): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(494,20): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(497,11): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(498,11): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(499,11): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(500,11): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(501,11): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(502,11): warning C4244: '=': conversão de 'unsigned int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(505,26): warning C4305: 'inicializando': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(533,27): warning C4244: 'argumento': conversão de 'float' para 'GLuint', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(582,33): warning C4305: '+=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(598,34): warning C4305: '+=': truncamento de 'double' para 'float'
+C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\Sabertooth\main.cpp(634,41): warning C4244: 'argumento': conversão de 'float' para 'GLuint', possível perda de dados
   SOIL.lib(stb_image_aug.obj) : MSIL .netmodule ou módulo compilado com /GL encontrado; reiniciando link com /LTCG; adicione /LTCG ao link da linha de comando para melhorar performance do vinculador
 LINK : warning LNK4075: ignorando '/INCREMENTAL' devido a especificaþÒo '/LTCG'
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
   Gerando c¾digo
   Finalizada a geraþÒo de c¾digo
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(stb_image_aug.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(SOIL.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_helper.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_DXT.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-  Sabertooth.vcxproj -> C:\Users\bruno\Documents\OpenGL\opengl-trabalho-ga\x64\Debug\Sabertooth.exe
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(stb_image_aug.obj)' ou no 'C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(SOIL.obj)' ou no 'C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_helper.obj)' ou no 'C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_DXT.obj)' ou no 'C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+  Sabertooth.vcxproj -> C:\Users\natan\Desktop\projetos\opengl-trabalho-ga\x64\Debug\Sabertooth.exe
