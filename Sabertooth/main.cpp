@@ -265,8 +265,8 @@ int main() {
 		"uniform float tamanho;"
 		
 		"void main () {"
-		"texture_coords = texture_mapping;"
-		"gl_Position = proj * matrix * vec4(vertex_position, layer_z, tamanho);"
+			"texture_coords = texture_mapping;"
+			"gl_Position = proj * matrix * vec4(vertex_position, layer_z, tamanho);"
 		"}";
 
 	const char* fragment_shader =
@@ -278,11 +278,11 @@ int main() {
 		"uniform float imagem;"
 		"out vec4 frag_color;"
 		"void main () {"
-		"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx)*imagem, texture_coords.y + offsety));"
-		"if (texel.a < 0.5) {"
-		"discard;"
-		"}"
-		"frag_color = texel;"
+			"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"
+			"if (texel.a < 0.5) {"
+				"discard;"
+			"}"
+			"frag_color = texel;"
 		"}";
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -442,7 +442,7 @@ int main() {
 
 	// load image, create texture and generate mipmaps
 
-	data = stbi_load("bin/Images/bonecos.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	data = stbi_load("bin/Images/bonecos-new2.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
@@ -473,6 +473,7 @@ int main() {
 	matrix_carro = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0.0f));
 	matrix_pessoa = glm::translate(glm::mat4(1), glm::vec3(50, 130, 0.0f));
 	
+	//glfwSetKeyCallback(g_window, key_callback);
 
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
@@ -504,6 +505,11 @@ int main() {
 
 	float movimentoCeu = 0.1;
 	float tamanhoPersonagem = 3.0;
+
+	float d = 0;
+
+	int count = 0;
+
 	while (!glfwWindowShouldClose(g_window))
 	{
 		processInput(g_window);
@@ -568,52 +574,79 @@ int main() {
 				int stateA = glfwGetKey(g_window, GLFW_KEY_A);
 				int stateS = glfwGetKey(g_window, GLFW_KEY_S);
 				
-				
-				if (stateD == GLFW_PRESS)
-				{
-					if (matrix_pessoa[3].x <= 525) {
-						matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0.3, 0, 0.0f));
+
+				if (stateD == GLFW_PRESS || stateA == GLFW_PRESS || stateW == GLFW_PRESS || stateS == GLFW_PRESS) {
+
+					if (count > 50) {
+
+						printf("aqui");
+						if (d == 0) {
+							d = 1.1f;
+						}
+						else if (d == 1.1f && count > 100) {
+							d = 0;
+							count = 0;
+						}
+
 					}
-				}
-				if (stateW == GLFW_PRESS)
-				{
-					if (matrix_pessoa[3].y >= 120) {
-						matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, -0.3, 0.0f));
-						tamanhoPersonagem += 0.003;
-						glUniform1f(
-							glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
+					else {
+						d = 0;
+					}
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "offsetx"), d);
+
+					if (stateD == GLFW_PRESS) {
+						
+
+						if (matrix_pessoa[3].x <= 525) {
+							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0.3, 0, 0.0f));
+						}
+
+					} 
+					else if (stateW == GLFW_PRESS) {
+
+						if (matrix_pessoa[3].y >= 120) {
+							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, -0.3, 0.0f));
+							tamanhoPersonagem += 0.003;
+							glUniform1f(
+								glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
+						}
+
+					}
+					else if (stateA == GLFW_PRESS) {
+
+						if (matrix_pessoa[3].x >= 0) {
+							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(-0.3, 0, 0.0f));
+						}
+
+					}
+					else if (stateS == GLFW_PRESS) {
+
+						if (matrix_pessoa[3].y <= 205) {
+							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, 0.3, 0.0f));
+							tamanhoPersonagem += -0.003;
+							glUniform1f(
+								glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
+						}
+
 					}
 
 				}
-				if (stateA == GLFW_PRESS)
-				{
-					if (matrix_pessoa[3].x >= 0) {
-						matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(-0.3, 0, 0.0f));
-					}
+				else {
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "offsetx"), -1.2);
+
+					count = 0;
 				}
-				if (stateS == GLFW_PRESS)
-				{
-					if (matrix_pessoa[3].y <=205) {
-						matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, 0.3, 0.0f));
-						tamanhoPersonagem += -0.003;
-						glUniform1f(
-							glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-					}
-				}
+
+				count++;
 				
 				glUniformMatrix4fv(
 					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(matrix_pessoa));
-
-				
-				
+					GL_FALSE, glm::value_ptr(matrix_pessoa));			
 			
 			}
-			
-			
-			
 			else {
-				
 				
 				glUniform1f(
 					glGetUniformLocation(shader_programme, "offsetx"), 1);
@@ -628,8 +661,6 @@ int main() {
 				glGetUniformLocation(shader_programme, "offsety"), 1);
 			glUniform1f(
 				glGetUniformLocation(shader_programme, "layer_z"), layersZ[i]);
-		
-			
 
 			glBindTexture(GL_TEXTURE_2D, layers[i]);
 			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
