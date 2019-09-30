@@ -120,6 +120,14 @@ int main() {
 		300.0f, 480.0f, 0.0f,   0.0f, 1.0f //buttom right
 	};
 
+	float vertices6[] = {
+		// positions          // colors           // texture coords
+		640.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
+		640.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
+		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
+		0.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
+	};
+
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
@@ -252,6 +260,25 @@ int main() {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	unsigned int EBO7;
+	glGenBuffers(1, &EBO7);
+	unsigned int VBO7, VAO7;
+	glGenVertexArrays(1, &VAO7);
+	glBindVertexArray(VAO7);
+
+	glGenBuffers(1, &VBO7);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO7);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices6), vertices6, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO7);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute		                //de quanto em quanto	//onde começa
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	const char* vertex_shader =
 		"#version 410\n"
@@ -299,7 +326,7 @@ int main() {
 	glLinkProgram(shader_programme);
 
 
-	unsigned int texture1, texture2, texture3, texture4, texture5, texture6;
+	unsigned int texture1, texture2, texture3, texture4, texture5, texture6, texture7;
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 										   // set the texture wrapping parameters
@@ -456,6 +483,31 @@ int main() {
 
 	stbi_image_free(data);
 
+	glGenTextures(1, &texture7);
+	glBindTexture(GL_TEXTURE_2D, texture7);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// load image, create texture and generate mipmaps
+
+	data = stbi_load("bin/Images/game_over.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	if (data)
+	{
+		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	stbi_image_free(data);
+
 
 	glUseProgram(shader_programme);
 	glfwSetKeyCallback(g_window, key_callback);
@@ -517,155 +569,174 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		/*static double previousSeconds = glfwGetTime();
-		double currentSeconds = glfwGetTime();
-		double elapsedSeconds =
+		static float previousSeconds = glfwGetTime();
+		float currentSeconds = glfwGetTime();
+		float elapsedSeconds =
 			currentSeconds - previousSeconds;
 		previousSeconds = currentSeconds;
-		if (fabs(lastPosition) > 1.5f) {
-			matrix[12] = -1.5;
-			lastPosition = matrix[12];
-		}
-		else {
-			matrix[12] = elapsedSeconds * speed +
-				lastPosition;
-			lastPosition = matrix[12];
-		}
-		glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);*/
 		
 		glUseProgram(shader_programme);
-		for (int i = 0; i < 6; i++) {
+		if (currentSeconds > 20.0f) {
+			glBindVertexArray(VAO7);
 
-			glBindVertexArray(vao[i]);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "imagem"), 1);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsetx"), 0);
+			glUniformMatrix4fv(
+				glGetUniformLocation(shader_programme, "matrix"), 1,
+				GL_FALSE, glm::value_ptr(glm::mat4(1)));
 
-			if (i == 0) {
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "imagem"), 1);
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "tamanho"), 1);
-				movimentoCeu += 0.15 * 0.0001f;
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), movimentoCeu);
-				glUniformMatrix4fv(
-					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(glm::mat4(1)));
 			
-			} else if (i == 4) {
-				if (matrix_carro[3].x <= 650) {
-					matrix_carro = glm::translate(matrix_carro, glm::vec3(0.4, 0, 0.0f));
+
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsety"), 1);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "layer_z"), -0.45);
+
+			glBindTexture(GL_TEXTURE_2D, texture7);
+			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		}
+		else {
+
+			for (int i = 0; i < 6; i++) {
+
+				glBindVertexArray(vao[i]);
+
+				if (i == 0) {
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "imagem"), 1);
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "tamanho"), 1);
+					movimentoCeu += 0.15 * 0.0001f;
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "offsetx"), movimentoCeu);
+					glUniformMatrix4fv(
+						glGetUniformLocation(shader_programme, "matrix"), 1,
+						GL_FALSE, glm::value_ptr(glm::mat4(1)));
+
 				}
-				else {
-					matrix_carro[3].x = -400;
+				else if (i == 4) {
+					if (matrix_carro[3].x <= 650) {
+						matrix_carro = glm::translate(matrix_carro, glm::vec3(0.4, 0, 0.0f));
+					}
+					else {
+						matrix_carro[3].x = -400;
+					}
+					glUniformMatrix4fv(
+						glGetUniformLocation(shader_programme, "matrix"), 1,
+						GL_FALSE, glm::value_ptr(matrix_carro));
+
 				}
-				glUniformMatrix4fv(
-					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(matrix_carro));
-			
-			} else if (i == 5) {
-				
+				else if (i == 5) {
 
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "imagem"), 0.125);
 
-				int stateD = glfwGetKey(g_window, GLFW_KEY_D);
-				int stateW = glfwGetKey(g_window, GLFW_KEY_W);
-				int stateA = glfwGetKey(g_window, GLFW_KEY_A);
-				int stateS = glfwGetKey(g_window, GLFW_KEY_S);
-				
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "imagem"), 0.125);
 
-				if (stateD == GLFW_PRESS || stateA == GLFW_PRESS || stateW == GLFW_PRESS || stateS == GLFW_PRESS) {
+					int stateD = glfwGetKey(g_window, GLFW_KEY_D);
+					int stateW = glfwGetKey(g_window, GLFW_KEY_W);
+					int stateA = glfwGetKey(g_window, GLFW_KEY_A);
+					int stateS = glfwGetKey(g_window, GLFW_KEY_S);
 
-					if (count > 50) {
 
-						printf("aqui");
-						if (d == 0) {
-							d = 1.1f;
+					if (stateD == GLFW_PRESS || stateA == GLFW_PRESS || stateW == GLFW_PRESS || stateS == GLFW_PRESS) {
+
+						if (count > 50) {
+
+							if (d == 0) {
+								d = 1.1f;
+							}
+							else if (d == 1.1f && count > 100) {
+								d = 0;
+								count = 0;
+							}
+
 						}
-						else if (d == 1.1f && count > 100) {
+						else {
 							d = 0;
-							count = 0;
+						}
+						glUniform1f(
+							glGetUniformLocation(shader_programme, "offsetx"), d);
+
+						if (stateD == GLFW_PRESS) {
+
+
+							if (matrix_pessoa[3].x <= 525) {
+								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0.3, 0, 0.0f));
+							}
+
+						}
+						else if (stateW == GLFW_PRESS) {
+
+							if (matrix_pessoa[3].y >= 120) {
+								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, -0.3, 0.0f));
+								tamanhoPersonagem += 0.003;
+								glUniform1f(
+									glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
+							}
+
+						}
+						else if (stateA == GLFW_PRESS) {
+
+							if (matrix_pessoa[3].x >= 0) {
+								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(-0.3, 0, 0.0f));
+							}
+
+						}
+						else if (stateS == GLFW_PRESS) {
+
+							if (matrix_pessoa[3].y <= 205) {
+								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, 0.3, 0.0f));
+								tamanhoPersonagem += -0.003;
+								glUniform1f(
+									glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
+							}
+
 						}
 
 					}
 					else {
-						d = 0;
+						glUniform1f(
+							glGetUniformLocation(shader_programme, "offsetx"), -1.2);
+
+						count = 0;
 					}
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "offsetx"), d);
 
-					if (stateD == GLFW_PRESS) {
-						
+					count++;
 
-						if (matrix_pessoa[3].x <= 525) {
-							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0.3, 0, 0.0f));
-						}
-
-					} 
-					else if (stateW == GLFW_PRESS) {
-
-						if (matrix_pessoa[3].y >= 120) {
-							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, -0.3, 0.0f));
-							tamanhoPersonagem += 0.003;
-							glUniform1f(
-								glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-						}
-
-					}
-					else if (stateA == GLFW_PRESS) {
-
-						if (matrix_pessoa[3].x >= 0) {
-							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(-0.3, 0, 0.0f));
-						}
-
-					}
-					else if (stateS == GLFW_PRESS) {
-
-						if (matrix_pessoa[3].y <= 205) {
-							matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, 0.3, 0.0f));
-							tamanhoPersonagem += -0.003;
-							glUniform1f(
-								glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-						}
-
-					}
+					glUniformMatrix4fv(
+						glGetUniformLocation(shader_programme, "matrix"), 1,
+						GL_FALSE, glm::value_ptr(matrix_pessoa));
 
 				}
 				else {
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "offsetx"), -1.2);
 
-					count = 0;
+					glUniform1f(
+						glGetUniformLocation(shader_programme, "offsetx"), 1);
+
+					glUniformMatrix4fv(
+						glGetUniformLocation(shader_programme, "matrix"), 1,
+						GL_FALSE, glm::value_ptr(glm::mat4(1)));
 				}
 
-				count++;
-				
-				glUniformMatrix4fv(
-					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(matrix_pessoa));			
-			
-			}
-			else {
-				
+
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), 1);
+					glGetUniformLocation(shader_programme, "offsety"), 1);
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "layer_z"), layersZ[i]);
 
-				glUniformMatrix4fv(
-					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(glm::mat4(1)));
+				glBindTexture(GL_TEXTURE_2D, layers[i]);
+				glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 			}
-
-			
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "offsety"), 1);
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "layer_z"), layersZ[i]);
-
-			glBindTexture(GL_TEXTURE_2D, layers[i]);
-			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 		}
 
 		glfwSwapBuffers(g_window);
