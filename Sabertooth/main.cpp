@@ -72,62 +72,6 @@ int main() {
 		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
 	};
 
-	float vertices1[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
-	};
-
-	float vertices2[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
-	};
-
-	float vertices3[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
-	};
-
-	/*float vertices4[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
-	};*/
-
-	float vertices4[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom left
-		0.0f, 350.0f, 0.0f,   1.0f, 0.0f, // top left
-		300.0f, 350.0f, 0.0f,   0.0f, 0.0f, // top right
-		300.0f, 480.0f, 0.0f,   0.0f, 1.0f //buttom right
-	};
-
-	float vertices5[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom left
-		0.0f, 350.0f, 0.0f,   1.0f, 0.0f, // top left
-		300.0f, 350.0f, 0.0f,   0.0f, 0.0f, // top right
-		300.0f, 480.0f, 0.0f,   0.0f, 1.0f //buttom right
-	};
-
-	float vertices6[] = {
-		// positions          // colors           // texture coords
-		640.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-		640.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		0.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
-	};
-
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
@@ -145,132 +89,6 @@ int main() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute		                //de quanto em quanto	//onde começa
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	unsigned int EBO2;
-	glGenBuffers(1, &EBO2);
-
-	unsigned int VBO2, VAO2;
-	glGenVertexArrays(1, &VAO2);
-	glBindVertexArray(VAO2);
-
-	glGenBuffers(1, &VBO2);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute		                //de quanto em quanto	//onde começa
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	unsigned int VBO3, VAO3, EBO3;
-	glGenBuffers(1, &EBO3);
-	glGenVertexArrays(1, &VAO3);
-	glBindVertexArray(VAO3);
-
-	glGenBuffers(1, &VBO3);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO3);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO3);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute		                //de quanto em quanto	//onde começa
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-
-	unsigned int EBO4;
-	glGenBuffers(1, &EBO4);
-
-	unsigned int VBO4, VAO4;
-	glGenVertexArrays(1, &VAO4);
-	glBindVertexArray(VAO4);
-
-	glGenBuffers(1, &VBO4);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO4);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3), vertices3, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO4);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute		                //de quanto em quanto	//onde começa
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	unsigned int EBO5;
-	glGenBuffers(1, &EBO5);
-
-	unsigned int VBO5, VAO5;
-	glGenVertexArrays(1, &VAO5);
-	glBindVertexArray(VAO5);
-
-	glGenBuffers(1, &VBO5);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO5);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices4), vertices4, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO4);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute		                //de quanto em quanto	//onde começa
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	
-	
-	unsigned int EBO6;
-	glGenBuffers(1, &EBO6);
-
-	unsigned int VBO6, VAO6;
-	glGenVertexArrays(1, &VAO6);
-	glBindVertexArray(VAO6);
-
-	glGenBuffers(1, &VBO6);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO6);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices5), vertices5, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO5);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute		                //de quanto em quanto	//onde começa
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	unsigned int EBO7;
-	glGenBuffers(1, &EBO7);
-	unsigned int VBO7, VAO7;
-	glGenVertexArrays(1, &VAO7);
-	glBindVertexArray(VAO7);
-
-	glGenBuffers(1, &VBO7);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO7);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices6), vertices6, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO7);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// position attribute		                //de quanto em quanto	//onde começa
@@ -326,7 +144,7 @@ int main() {
 	glLinkProgram(shader_programme);
 
 
-	unsigned int texture1, texture2, texture3, texture4, texture5, texture6, texture7;
+	unsigned int texture1;
 	glGenTextures(1, &texture1);
 	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 										   // set the texture wrapping parameters
@@ -339,7 +157,7 @@ int main() {
 	// load image, create texture and generate mipmaps
 	int width, height, nrChannels;
 	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data = stbi_load("bin/Images/ceu.jpg", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	unsigned char *data = stbi_load("bin/Images/wall.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -350,164 +168,6 @@ int main() {
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
-
-	// texture 2
-	// ---------
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load image, create texture and generate mipmaps
-
-	data = stbi_load("bin/Images/casas-edit.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
-	// texture 3
-	// ---------
-	glGenTextures(1, &texture3);
-	glBindTexture(GL_TEXTURE_2D, texture3);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load image, create texture and generate mipmaps
-
-	data = stbi_load("bin/Images/calcada-edit.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
-	// texture 4
-	// ---------
-	glGenTextures(1, &texture4);
-	glBindTexture(GL_TEXTURE_2D, texture4);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load image, create texture and generate mipmaps
-	
-	data = stbi_load("bin/Images/rua-edit.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
-	glGenTextures(1, &texture5);
-	glBindTexture(GL_TEXTURE_2D, texture5);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load image, create texture and generate mipmaps
-
-	data = stbi_load("bin/Images/carro.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
-
-	glGenTextures(1, &texture6);
-	glBindTexture(GL_TEXTURE_2D, texture6);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load image, create texture and generate mipmaps
-
-	data = stbi_load("bin/Images/bonecos-new2.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
-	glGenTextures(1, &texture7);
-	glBindTexture(GL_TEXTURE_2D, texture7);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// load image, create texture and generate mipmaps
-
-	data = stbi_load("bin/Images/game_over.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-
-	stbi_image_free(data);
-
 
 	glUseProgram(shader_programme);
 	glfwSetKeyCallback(g_window, key_callback);
@@ -530,37 +190,18 @@ int main() {
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
 
-	float layers[6];
+	float layers[1];
 	layers[0] = texture1;
-	layers[1] = texture2;
-	layers[2] = texture3;
-	layers[3] = texture4;
-	layers[4] = texture5;
-	layers[5] = texture6;
 
-	float layersZ[6];
+	float layersZ[1];
 	layersZ[0] = -0.50;
-	layersZ[1] = -0.49;
-	layersZ[2] = -0.48;
-	layersZ[3] = -0.47;
-	layersZ[4] = -0.45;
-	layersZ[5] = -0.46;
 
-	float vao[6];
+	float vao[1];
 	vao[0] = VAO;
-	vao[1] = VAO2;
-	vao[2] = VAO3;
-	vao[3] = VAO4;
-	vao[4] = VAO5;
-	vao[5] = VAO6;
 
-
-	float movimentoCeu = 0.1;
-	float tamanhoPersonagem = 3.0;
-
-	float d = 0;
-
-	int count = 0;
+	unsigned char tilemap[] = {
+		's'
+	};
 
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -576,168 +217,37 @@ int main() {
 		previousSeconds = currentSeconds;
 		
 		glUseProgram(shader_programme);
-		if (currentSeconds > 20.0f) {
-			glBindVertexArray(VAO7);
-
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "imagem"), 1);
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "tamanho"), 1);
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "offsetx"), 0);
-			glUniformMatrix4fv(
-				glGetUniformLocation(shader_programme, "matrix"), 1,
-				GL_FALSE, glm::value_ptr(glm::mat4(1)));
-
-			
 
 
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "offsety"), 1);
-			glUniform1f(
-				glGetUniformLocation(shader_programme, "layer_z"), -0.45);
+		glBindVertexArray(vao[0]);
 
-			glBindTexture(GL_TEXTURE_2D, texture7);
-			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		}
-		else {
-
-			for (int i = 0; i < 6; i++) {
-
-				glBindVertexArray(vao[i]);
-
-				if (i == 0) {
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "imagem"), 1);
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "tamanho"), 1);
-					movimentoCeu += 0.15 * 0.0001f;
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "offsetx"), movimentoCeu);
-					glUniformMatrix4fv(
-						glGetUniformLocation(shader_programme, "matrix"), 1,
-						GL_FALSE, glm::value_ptr(glm::mat4(1)));
-
-				}
-				else if (i == 4) {
-					if (matrix_carro[3].x <= 650) {
-						matrix_carro = glm::translate(matrix_carro, glm::vec3(0.4, 0, 0.0f));
-					}
-					else {
-						matrix_carro[3].x = -400;
-					}
-					glUniformMatrix4fv(
-						glGetUniformLocation(shader_programme, "matrix"), 1,
-						GL_FALSE, glm::value_ptr(matrix_carro));
-
-				}
-				else if (i == 5) {
-
-
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "imagem"), 0.125);
-
-					int stateD = glfwGetKey(g_window, GLFW_KEY_D);
-					int stateW = glfwGetKey(g_window, GLFW_KEY_W);
-					int stateA = glfwGetKey(g_window, GLFW_KEY_A);
-					int stateS = glfwGetKey(g_window, GLFW_KEY_S);
-
-
-					if (stateD == GLFW_PRESS || stateA == GLFW_PRESS || stateW == GLFW_PRESS || stateS == GLFW_PRESS) {
-
-						if (count > 50) {
-
-							if (d == 0) {
-								d = 1.1f;
-							}
-							else if (d == 1.1f && count > 100) {
-								d = 0;
-								count = 0;
-							}
-
-						}
-						else {
-							d = 0;
-						}
-						glUniform1f(
-							glGetUniformLocation(shader_programme, "offsetx"), d);
-
-						if (stateD == GLFW_PRESS) {
-
-
-							if (matrix_pessoa[3].x <= 525) {
-								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0.3, 0, 0.0f));
-							}
-
-						}
-						else if (stateW == GLFW_PRESS) {
-
-							if (matrix_pessoa[3].y >= 120) {
-								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, -0.3, 0.0f));
-								tamanhoPersonagem += 0.003;
-								glUniform1f(
-									glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-							}
-
-						}
-						else if (stateA == GLFW_PRESS) {
-
-							if (matrix_pessoa[3].x >= 0) {
-								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(-0.3, 0, 0.0f));
-							}
-
-						}
-						else if (stateS == GLFW_PRESS) {
-
-							if (matrix_pessoa[3].y <= 205) {
-								matrix_pessoa = glm::translate(matrix_pessoa, glm::vec3(0, 0.3, 0.0f));
-								tamanhoPersonagem += -0.003;
-								glUniform1f(
-									glGetUniformLocation(shader_programme, "tamanho"), tamanhoPersonagem);
-							}
-
-						}
-
-					}
-					else {
-						glUniform1f(
-							glGetUniformLocation(shader_programme, "offsetx"), -1.2);
-
-						count = 0;
-					}
-
-					count++;
-
-					glUniformMatrix4fv(
-						glGetUniformLocation(shader_programme, "matrix"), 1,
-						GL_FALSE, glm::value_ptr(matrix_pessoa));
-
-				}
-				else {
-
-					glUniform1f(
-						glGetUniformLocation(shader_programme, "offsetx"), 1);
-
-					glUniformMatrix4fv(
-						glGetUniformLocation(shader_programme, "matrix"), 1,
-						GL_FALSE, glm::value_ptr(glm::mat4(1)));
-				}
-
-
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsety"), 1);
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "layer_z"), layersZ[i]);
-
-				glBindTexture(GL_TEXTURE_2D, layers[i]);
-				glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		for (int r = 0; r < 4; r++) {
+			for (int c = 0; c < 8; c++) {
+				//translação do  do tile (em x e y baseado em c e r) 
+				//define coordenadas x e y de mapeamento de textura
+				//desenha triângulos para o tile
 
 			}
 		}
+
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "imagem"), 1);
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "tamanho"), 1);
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "offsetx"), 1);
+		glUniformMatrix4fv(
+			glGetUniformLocation(shader_programme, "matrix"), 1,
+			GL_FALSE, glm::value_ptr(glm::mat4(1)));
+
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "offsety"), 1);
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "layer_z"), layersZ[0]);
+
+		glBindTexture(GL_TEXTURE_2D, layers[0]);
+		glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();
@@ -748,23 +258,6 @@ int main() {
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 
-	glDeleteVertexArrays(1, &VAO2);
-	glDeleteBuffers(1, &VBO2);
-	glDeleteBuffers(1, &EBO2);
-
-	glDeleteVertexArrays(1, &VAO3);
-	glDeleteBuffers(1, &VBO3);
-	glDeleteBuffers(1, &EBO3);
-
-	glDeleteVertexArrays(1, &VAO4);
-	glDeleteBuffers(1, &VBO4);
-	glDeleteBuffers(1, &EBO4);
-
-	glDeleteVertexArrays(1, &VAO5);
-	glDeleteBuffers(1, &VBO5);
-	glDeleteBuffers(1, &EBO5);
-
-	// encerra contexto GL e outros recursos da GLFW
 	glfwTerminate();
 	return 0;
 
