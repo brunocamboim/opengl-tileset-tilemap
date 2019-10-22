@@ -42,7 +42,7 @@ int main() {
 	
 
 	if (!glfwInit()) {
-		fprintf(stderr, "ERROR: could not start GLFW3\n");
+		//fprintf(stderr, "ERROR: could not start GLFW3\n");
 		return 1;
 	}
 	/* Caso necessário, definições específicas para SOs, p. e. Apple OSX *
@@ -54,7 +54,7 @@ int main() {
 	GLFWwindow *g_window = glfwCreateWindow(
 		640, 480, "Teste de versão OpenGL", NULL, NULL);
 	if (!g_window) {
-		fprintf(stderr, "ERROR: could not open window with GLFW3\n");
+		//fprintf(stderr, "ERROR: could not open window with GLFW3\n");
 		glfwTerminate();
 		return 1;
 	}
@@ -223,8 +223,19 @@ int main() {
 
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 8; c++) {
-				//translação do  do tile (em x e y baseado em c e r) 
+				//translação do tile (em x e y baseado em c e r) 
+				//vertex shader:
+				//tx = c * tw
+				//ty = r * th
+				
+				//coluna textura e linhas textura
 				//define coordenadas x e y de mapeamento de textura
+				//CT = ID % TTC;
+				//RT = ID / TTC;
+				//fragment shader:
+				//vt.x = CT * TTW;
+				//vt.y = RT * TTH;
+
 				//desenha triângulos para o tile
 
 			}
