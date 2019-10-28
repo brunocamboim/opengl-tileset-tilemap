@@ -5,6 +5,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "TileMap.h"
+#include "TileSet.h"
+
 #define EXIT_FAILURE -1
 #define EXIT_SUCCESS 0
 
@@ -15,10 +18,7 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-
 glm::mat4 matrix_origem = glm::mat4(1);
-glm::mat4 matrix_pessoa = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0));
-glm::mat4 matrix_carro = glm::translate(glm::mat4(1), glm::vec3(0,0,0));
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 // actions are GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
@@ -103,7 +103,7 @@ int main() {
 		"layout (location = 0) in vec2 vertex_position;"
 		"layout (location = 1) in vec2 texture_mapping;"
 		"out vec2 texture_coords;"
-
+		
 		"uniform mat4 matrix;"
 		"uniform mat4 proj;"
 		"uniform float layer_z;"
@@ -117,13 +117,16 @@ int main() {
 	const char* fragment_shader =
 		"#version 410\n"
 		"in vec2 texture_coords;"
+
 		"uniform sampler2D sprite;"
 		"uniform float offsetx;"
 		"uniform float offsety;"
 		"uniform float imagem;"
+
 		"out vec4 frag_color;"
+
 		"void main () {"
-			"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"
+			"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx), texture_coords.y + offsety));"
 			"if (texel.a < 0.5) {"
 				"discard;"
 			"}"
@@ -182,10 +185,16 @@ int main() {
 		glGetUniformLocation(shader_programme, "proj"), 1,
 		GL_FALSE, glm::value_ptr(proj));
 
-	matrix_carro = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0.0f));
-	matrix_pessoa = glm::translate(glm::mat4(1), glm::vec3(50, 130, 0.0f));
 	
-	//glfwSetKeyCallback(g_window, key_callback);
+	
+	TileSet tileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
+	TileMap tileMap("bin/Images/tilemap.csv", 10, 10, tileSet, 32);
+
+	//tileSetCenario = TileSet::TileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
+	//TileMap tilemapCenario("bin/Images/tilemap.csv", 10, 10, tileSetCenario, 32);
+
+	//tileSetCenario = TileSet::TileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
+	//TileMap::TileMap("bin/Images/tilemap.csv", 10, 10, tileSetCenario, 32);
 
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
@@ -198,10 +207,6 @@ int main() {
 
 	float vao[1];
 	vao[0] = VAO;
-
-	unsigned char tilemap[] = {
-		's'
-	};
 
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -220,6 +225,44 @@ int main() {
 
 
 		glBindVertexArray(vao[0]);
+
+		float* offsets;
+		for (int i = 0; i < tileMap.numLinhas; i++)
+		{
+			for (int j = tileMap.numColunas - 1; j >= 0; j--)
+			{
+				offsets = tileMap.GetTileOffset(i, j);
+
+				glm::mat4 transformation = glm::translate(
+					matrix_origem, 
+					glm::vec3(
+						j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO, 
+						(j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO) 
+						+ (tileMap.numLinhas * tileMap.TH_CENTRO) 
+						+ tileMap.TH_CENTRO - tileSet.alturaTiles, 0.0f
+					)
+				);
+
+				glUniformMatrix4fv(
+					glGetUniformLocation(shader_programme, "matrix"), 1,
+					GL_FALSE, glm::value_ptr(glm::mat4(1)));
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "x"), tileSet.x);
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "y"), tileSet.y);
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "offsetx"), offsets[0]);
+				glUniform1f(
+					glGetUniformLocation(shader_programme, "offsety"), offsets[1]);
+
+				// bind Texture
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
+				glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				
+			}
+		}
 
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 8; c++) {
@@ -240,25 +283,6 @@ int main() {
 
 			}
 		}
-
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "imagem"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), 1);
-		glUniformMatrix4fv(
-			glGetUniformLocation(shader_programme, "matrix"), 1,
-			GL_FALSE, glm::value_ptr(glm::mat4(1)));
-
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), layersZ[0]);
-
-		glBindTexture(GL_TEXTURE_2D, layers[0]);
-		glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();

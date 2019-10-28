@@ -1,4 +1,9 @@
-#include <GL/glew.h>
+#ifndef LAYER_H
+#define LAYER_H
+
+#include <GL/glew.h> /* include GLEW and new version of GL on Windows */
+#include <stdio.h>
+#include <stdlib.h>
 #include <SOIL.h>
 
 using namespace std;
@@ -7,6 +12,8 @@ using namespace std;
 class Layer
 {
 public:
+	Layer();
+	~Layer();
 
 	GLuint texture;
 	float offsetx;
@@ -17,6 +24,6 @@ public:
 	float ratex;
 	float prop;
 
-	virtual void loadTexture(char* filepath);
+	void loadTexture(char* filepath);
 };
-
+#endif
