@@ -231,17 +231,31 @@ int main() {
 		{
 			for (int j = tileMap.numColunas - 1; j >= 0; j--)
 			{
+				//translação do tile (em x e y baseado em c e r) 
 				offsets = tileMap.GetTileOffset(i, j);
 
 				glm::mat4 transformation = glm::translate(
-					matrix_origem, 
+					matrix_origem,
 					glm::vec3(
-						j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO, 
-						(j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO) 
-						+ (tileMap.numLinhas * tileMap.TH_CENTRO) 
-						+ tileMap.TH_CENTRO - tileSet.alturaTiles, 0.0f
+						j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
+						(j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO) + (tileMap.numLinhas * tileMap.TH_CENTRO) + tileMap.TH_CENTRO - tileSet.alturaTiles, 
+						0.0f
 					)
 				);
+
+				//GL_POSITION
+				float tx = j * tileMap.TW;
+				float ty = i * tileMap.TH;
+
+				//TEXTURE
+				float CT = offsets[0];
+				float RT = offsets[1];
+
+				float TTW = 0;
+				float TTH = 0;
+				float sx = CT * TTW;
+				float sy = RT * TTH;
+
 
 				glUniformMatrix4fv(
 					glGetUniformLocation(shader_programme, "matrix"), 1,
@@ -251,9 +265,9 @@ int main() {
 				glUniform1f(
 					glGetUniformLocation(shader_programme, "y"), tileSet.y);
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), offsets[0]);
+					glGetUniformLocation(shader_programme, "offsetx"), CT);
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsety"), offsets[1]);
+					glGetUniformLocation(shader_programme, "offsety"), RT);
 
 				// bind Texture
 				glActiveTexture(GL_TEXTURE0);

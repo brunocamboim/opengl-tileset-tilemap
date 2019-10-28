@@ -60,7 +60,7 @@ public:
 		char unsigned idTile = this->idTiles[i][j];
 
 		float offsets[2] = {
-			idTile % this->tileset.numLinhas,
+			idTile % this->tileset.numColunas,
 			idTile / this->tileset.numColunas
 		};
 
