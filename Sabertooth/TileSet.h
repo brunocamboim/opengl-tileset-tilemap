@@ -1,3 +1,5 @@
+#ifndef TILESET_H
+#define TILESET_H
 
 #include "Layer.h"
 // Classe responsável por criar o TileSet.
@@ -14,8 +16,8 @@ public:
 	float alturaTiles;
 	float larguraTiles;
 
-	TileSet();
-	~TileSet();
+	TileSet() {}
+	~TileSet() {}
 
 	TileSet (char* filePath, float x, float y, int numColunas, int numLinhas, float alturaTiles, float larguraTiles)
 	{
@@ -35,3 +37,4 @@ public:
 
 };
 
+#endif

@@ -1,3 +1,6 @@
+#ifndef TILEMAP_H
+#define TILEMAP_H
+
 #include "TileSet.h"
 
 #include <fstream>
@@ -16,9 +19,6 @@ public:
 	int TH_CENTRO;
 	int TW;
 	int TW_CENTRO;
-
-	TileMap();
-	~TileMap();
 
 	TileMap (char* filePath, int numLinhas, int numColunas, TileSet tileset, int tile_height)
 	{
@@ -67,3 +67,5 @@ public:
 		return offsets;
 	}
 }; 
+
+#endif
