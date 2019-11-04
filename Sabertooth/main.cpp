@@ -126,11 +126,13 @@ int main() {
 		"out vec4 frag_color;"
 
 		"void main () {"
-			"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx), texture_coords.y + offsety));"
+			"vec2 tc = vec2(texture_coords.x + offsetx, texture_coords.y + offsety);"
+			"frag_color = texture(sprite, tc);"
+			/*"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"
 			"if (texel.a < 0.5) {"
 				"discard;"
 			"}"
-			"frag_color = texel;"
+			"frag_color = texel;"*/
 		"}";
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -147,66 +149,53 @@ int main() {
 	glLinkProgram(shader_programme);
 
 
-	unsigned int texture1;
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-										   // set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//unsigned int texture1;
+	//glGenTextures(1, &texture1);
+	//glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+	//									   // set the texture wrapping parameters
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
-	int width, height, nrChannels;
-	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data = stbi_load("bin/Images/wall.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+	//// set texture filtering parameters
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//// load image, create texture and generate mipmaps
+	//int width, height, nrChannels;
+	//// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+	//unsigned char *data = stbi_load("bin/Images/wall.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	//if (data)
+	//{
+	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	//	glGenerateMipmap(GL_TEXTURE_2D);
+	//}
+	//else
+	//{
+	//	std::cout << "Failed to load texture" << std::endl;
+	//}
+	//stbi_image_free(data);
 
 	glUseProgram(shader_programme);
-	glfwSetKeyCallback(g_window, key_callback);
 
-	glUniform1i(glGetUniformLocation(shader_programme, "texture1"), 0);
-
-	//int matrixLocation = glGetUniformLocation(shader_programme, "matrix");
-	//glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, matrix);
-	
 	glm::mat4 proj = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(
 		glGetUniformLocation(shader_programme, "proj"), 1,
 		GL_FALSE, glm::value_ptr(proj));
 
-	
-	
+
 	TileSet tileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
 	TileMap tileMap("bin/Images/tilemap.csv", 10, 10, tileSet, 32);
 
-	//tileSetCenario = TileSet::TileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
-	//TileMap tilemapCenario("bin/Images/tilemap.csv", 10, 10, tileSetCenario, 32);
+	/*for (int i = 0; i < 10; i++) {
 
-	//tileSetCenario = TileSet::TileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
-	//TileMap::TileMap("bin/Images/tilemap.csv", 10, 10, tileSetCenario, 32);
+		for (int j = 0; j < 10; j++) {
+			printf("Num: %c \n",tileMap.idTiles[i][j]);
+		}
+		
 
+	}*/
+	
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
-
-	float layers[1];
-	layers[0] = texture1;
-
-	float layersZ[1];
-	layersZ[0] = -0.50;
-
-	float vao[1];
-	vao[0] = VAO;
 
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -224,21 +213,32 @@ int main() {
 		glUseProgram(shader_programme);
 
 
-		glBindVertexArray(vao[0]);
+		glBindVertexArray(VAO);
+
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "imagem"), 1);
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "tamanho"), 1);
+		glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+		glUniformMatrix4fv(
+			glGetUniformLocation(shader_programme, "matrix"), 1,
+			GL_FALSE, glm::value_ptr(glm::mat4(1)));
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "layer_z"), 1);
 
 		float* offsets;
-		for (int i = 0; i < tileMap.numLinhas; i++)
+		/*for (int i = 0; i < tileMap.numLinhas; i++)
 		{
 			for (int j = tileMap.numColunas - 1; j >= 0; j--)
 			{
-				//translação do tile (em x e y baseado em c e r) 
+				//translação do tile (em x e y baseado em c e r)
 				offsets = tileMap.GetTileOffset(i, j);
 
 				glm::mat4 transformation = glm::translate(
 					matrix_origem,
 					glm::vec3(
 						j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
-						(j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO) + (tileMap.numLinhas * tileMap.TH_CENTRO) + tileMap.TH_CENTRO - tileSet.alturaTiles, 
+						(j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO) + (tileMap.numLinhas * tileMap.TH_CENTRO) + tileMap.TH_CENTRO - tileSet.alturaTiles,
 						0.0f
 					)
 				);
@@ -274,29 +274,22 @@ int main() {
 				glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
 				glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
 				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-				
-			}
-		}
-
-		for (int r = 0; r < 4; r++) {
-			for (int c = 0; c < 8; c++) {
-				//translação do tile (em x e y baseado em c e r) 
-				//vertex shader:
-				//tx = c * tw
-				//ty = r * th
-				
-				//coluna textura e linhas textura
-				//define coordenadas x e y de mapeamento de textura
-				//CT = ID % TTC;
-				//RT = ID / TTC;
-				//fragment shader:
-				//vt.x = CT * TTW;
-				//vt.y = RT * TTH;
-
-				//desenha triângulos para o tile
 
 			}
-		}
+		}*/
+
+		
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "offsetx"), 0);
+
+		glUniform1f(
+			glGetUniformLocation(shader_programme, "offsety"), 1);
+		
+
+		glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
+		
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();
