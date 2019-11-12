@@ -64,13 +64,24 @@ int main() {
 	glewExperimental = GL_TRUE;
 	glewInit();
 
+	float A[] = { 77, 154 };
+	float B[] = { 77, 0 };
+	float C[] = { 0,  0 };
+	float D[] = { 0,  154 };
 	float vertices[] = {
-		// positions          // colors           // texture coords
-		0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-		640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-		640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
+		// Posicoes		// Textura	
+		A[0], A[1], 0.0f,	1.0f, 1.0f,	// A
+		B[0], B[1], 0.0f,	1.0f, 0.0f,	// B
+		C[0], C[1], 0.0f,	0.0f, 0.0f,	// C
+		D[0], D[1], 0.0f,	0.0f, 1.0f,	// D
 	};
+	//float vertices[] = {
+	//	// positions          // colors           // texture coords
+	//	0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
+	//	0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
+	//	640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
+	//	640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
+	//};
 
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
@@ -149,50 +160,16 @@ int main() {
 	glLinkProgram(shader_programme);
 
 
-	//unsigned int texture1;
-	//glGenTextures(1, &texture1);
-	//glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-	//									   // set the texture wrapping parameters
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	//// set texture filtering parameters
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//// load image, create texture and generate mipmaps
-	//int width, height, nrChannels;
-	//// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	//unsigned char *data = stbi_load("bin/Images/wall.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
-	//if (data)
-	//{
-	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	//	glGenerateMipmap(GL_TEXTURE_2D);
-	//}
-	//else
-	//{
-	//	std::cout << "Failed to load texture" << std::endl;
-	//}
-	//stbi_image_free(data);
-
 	glUseProgram(shader_programme);
 
-	glm::mat4 proj = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(0.0f, (float)SCR_WIDTH, (float)SCR_HEIGHT, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(
 		glGetUniformLocation(shader_programme, "proj"), 1,
 		GL_FALSE, glm::value_ptr(proj));
 
 
-	TileSet tileSet("bin/Images/wall.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
-	TileMap tileMap("bin/Images/tilemap.csv", 10, 10, tileSet, 32);
-
-	/*for (int i = 0; i < 10; i++) {
-
-		for (int j = 0; j < 10; j++) {
-			printf("Num: %c \n",tileMap.idTiles[i][j]);
-		}
-		
-
-	}*/
+	TileSet tileSet("bin/Images/wall.png", 0.0f, 0.0f, 8, 4, 154.0f, 77.0f);
+	TileMap tileMap("bin/Images/tilemap.csv", 4, 4, tileSet, 32);
 	
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
@@ -215,7 +192,7 @@ int main() {
 
 		glBindVertexArray(VAO);
 
-		glUniform1f(
+		/*glUniform1f(
 			glGetUniformLocation(shader_programme, "imagem"), 1);
 		glUniform1f(
 			glGetUniformLocation(shader_programme, "tamanho"), 1);
@@ -225,27 +202,18 @@ int main() {
 			GL_FALSE, glm::value_ptr(glm::mat4(1)));
 		glUniform1f(
 			glGetUniformLocation(shader_programme, "layer_z"), 1);
-
+*/
 		float* offsets;
-		/*for (int i = 0; i < tileMap.numLinhas; i++)
+		for (int i = 0; i < tileMap.numLinhas; i++)
 		{
 			for (int j = tileMap.numColunas - 1; j >= 0; j--)
 			{
 				//translação do tile (em x e y baseado em c e r)
 				offsets = tileMap.GetTileOffset(i, j);
 
-				glm::mat4 transformation = glm::translate(
-					matrix_origem,
-					glm::vec3(
-						j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
-						(j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO) + (tileMap.numLinhas * tileMap.TH_CENTRO) + tileMap.TH_CENTRO - tileSet.alturaTiles,
-						0.0f
-					)
-				);
-
 				//GL_POSITION
-				float tx = j * tileMap.TW;
-				float ty = i * tileMap.TH;
+				float tx = j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO;
+				float ty = j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO;
 
 				//TEXTURE
 				float CT = offsets[0];
@@ -256,6 +224,15 @@ int main() {
 				float sx = CT * TTW;
 				float sy = RT * TTH;
 
+				glm::mat4 transformation = glm::translate(
+					matrix_origem,
+					glm::vec3(
+						//j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
+						0.0f,
+						0.0f,
+						0.0f
+					)
+				);
 
 				glUniformMatrix4fv(
 					glGetUniformLocation(shader_programme, "matrix"), 1,
@@ -265,9 +242,9 @@ int main() {
 				glUniform1f(
 					glGetUniformLocation(shader_programme, "y"), tileSet.y);
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), CT);
+					glGetUniformLocation(shader_programme, "offsetx"), i);
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsety"), RT);
+					glGetUniformLocation(shader_programme, "offsety"), j);
 
 				// bind Texture
 				glActiveTexture(GL_TEXTURE0);
@@ -276,10 +253,10 @@ int main() {
 				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 			}
-		}*/
+		}
 
 		
-		glUniform1f(
+		/*glUniform1f(
 			glGetUniformLocation(shader_programme, "offsetx"), 0);
 
 		glUniform1f(
@@ -288,7 +265,7 @@ int main() {
 
 		glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
 		
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
 
 
 		glfwSwapBuffers(g_window);

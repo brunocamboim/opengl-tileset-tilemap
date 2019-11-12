@@ -35,7 +35,6 @@ public:
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
 			j++;
-
 			if (j == numColunas) {
 				i--;
 				j = 0;
