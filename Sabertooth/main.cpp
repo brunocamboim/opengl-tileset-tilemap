@@ -7,6 +7,7 @@
 
 #include "TileMap.h"
 #include "TileSet.h"
+#include "Diamond.h"
 
 #define EXIT_FAILURE -1
 #define EXIT_SUCCESS 0
@@ -17,6 +18,18 @@ void processInput(GLFWwindow *window);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+int const TH = 40.0f;
+int const TH_CENTRO = TH / 2;
+int const TW = 2 * TH;
+int const TW_CENTRO = TW / 2;
+int const NUMBER_OF_ENEMYS = 4;
+
+float const NUM_COLUNAS = 10;
+float const NUM_LINHAS = 10;
+
+float TELA_LARGURA = TW * NUM_COLUNAS;
+float TELA_ALTURA = TH * NUM_COLUNAS;
 
 glm::mat4 matrix_origem = glm::mat4(1);
 
@@ -64,24 +77,26 @@ int main() {
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	float A[] = { 77, 154 };
-	float B[] = { 77, 0 };
-	float C[] = { 0,  0 };
-	float D[] = { 0,  154 };
+	float A[] = { 0 , TH / 2 };
+	float B[] = { TW / 2, TH };
+	float C[] = { TW , TH / 2 };
+	float D[] = { TW / 2, 0 };
+
+	float AT[] = { 0.0f, 0.5f };
+	float BT[] = { 0.5f, 1.0f };
+	float CT[] = { 1.0f, 0.5f };
+	float DT[] = { 0.5f, 0.0f };
+
+	int moveX = 0;
+	int moveY = 200;
+
 	float vertices[] = {
 		// Posicoes		// Textura	
-		A[0], A[1], 0.0f,	1.0f, 1.0f,	// A
-		B[0], B[1], 0.0f,	1.0f, 0.0f,	// B
-		C[0], C[1], 0.0f,	0.0f, 0.0f,	// C
-		D[0], D[1], 0.0f,	0.0f, 1.0f,	// D
+		A[0] + moveX, A[1] + moveY, 0.0f,	AT[0], AT[1],	// A
+		B[0] + moveX, B[1] + moveY, 0.0f,	BT[0], BT[1],	// B
+		C[0] + moveX, C[1] + moveY, 0.0f,	CT[0], CT[1],	// C
+		D[0] + moveX, D[1] + moveY, 0.0f,	DT[0], DT[1],	// D
 	};
-	//float vertices[] = {
-	//	// positions          // colors           // texture coords
-	//	0.0f, 480.0f, 0.0f,   1.0f, 1.0f, // buttom right
-	//	0.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
-	//	640.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
-	//	640.0f, 480.0f, 0.0f,   0.0f, 1.0f //top right
-	//};
 
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
@@ -132,12 +147,13 @@ int main() {
 		"uniform sampler2D sprite;"
 		"uniform float offsetx;"
 		"uniform float offsety;"
-		"uniform float imagem;"
+		"uniform float x;"
+		"uniform float y;"
 
 		"out vec4 frag_color;"
 
 		"void main () {"
-			"vec2 tc = vec2(texture_coords.x + offsetx, texture_coords.y + offsety);"
+			"vec2 tc = vec2((texture_coords.x + offsetx), (texture_coords.y + offsety));"
 			"frag_color = texture(sprite, tc);"
 			/*"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"
 			"if (texel.a < 0.5) {"
@@ -168,11 +184,18 @@ int main() {
 		GL_FALSE, glm::value_ptr(proj));
 
 
-	TileSet tileSet("bin/Images/wall.png", 0.0f, 0.0f, 8, 4, 154.0f, 77.0f);
-	TileMap tileMap("bin/Images/tilemap.csv", 4, 4, tileSet, 32);
-	
-	float speed = 1.0f;
-	float lastPosition = 0.0f;
+	TileSet tileSet("bin/Images/tileset.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
+	TileMap tileMap("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
+
+	printf("%f - %f - %d - %d - %f - %f\n", 
+		tileSet.x, tileSet.y, tileSet.numColunas, tileSet.numLinhas, tileSet.alturaTiles, tileSet.larguraTiles);
+
+	printf("%d - %d - %d - %d - %d - %d\n",
+		tileMap.numLinhas, tileMap.numColunas, tileMap.TH, tileMap.TH_CENTRO, tileMap.TW, tileMap.TW_CENTRO);
+
+	Diamond diamond(shader_programme, tileMap);
+
+	glm::mat4 matrix_aux = glm::translate(glm::mat4(1), glm::vec3(20, 40, 0.0f));
 
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -181,70 +204,34 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		static float previousSeconds = glfwGetTime();
-		float currentSeconds = glfwGetTime();
-		float elapsedSeconds =
-			currentSeconds - previousSeconds;
-		previousSeconds = currentSeconds;
-		
 		glUseProgram(shader_programme);
-
 
 		glBindVertexArray(VAO);
 
-		/*glUniform1f(
-			glGetUniformLocation(shader_programme, "imagem"), 1);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-		glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-		glUniformMatrix4fv(
-			glGetUniformLocation(shader_programme, "matrix"), 1,
-			GL_FALSE, glm::value_ptr(glm::mat4(1)));
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "layer_z"), 1);
-*/
+
+		bool teste = false;
 		float* offsets;
-		for (int i = 0; i < tileMap.numLinhas; i++)
+		for (int r = 0; r < tileMap.numLinhas; r++)
 		{
-			for (int j = tileMap.numColunas - 1; j >= 0; j--)
+			for (int c = tileMap.numColunas - 1; c >= 0; c--)
 			{
+				
 				//translação do tile (em x e y baseado em c e r)
-				offsets = tileMap.GetTileOffset(i, j);
-
-				//GL_POSITION
-				float tx = j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO;
-				float ty = j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO;
-
-				//TEXTURE
-				float CT = offsets[0];
-				float RT = offsets[1];
-
-				float TTW = 0;
-				float TTH = 0;
-				float sx = CT * TTW;
-				float sy = RT * TTH;
-
-				glm::mat4 transformation = glm::translate(
-					matrix_origem,
-					glm::vec3(
-						//j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
-						0.0f,
-						0.0f,
-						0.0f
-					)
-				);
+				float x = c * TW / 2 + r * TW / 2;
+				float y = c * TH / 2 - r * TH / 2;
+				matrix_aux = glm::translate(glm::mat4(1), glm::vec3(x, y, 0.0f));
 
 				glUniformMatrix4fv(
 					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(glm::mat4(1)));
+					GL_FALSE, glm::value_ptr(matrix_aux));
+
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "x"), tileSet.x);
+					glGetUniformLocation(shader_programme, "tamanho"), 1);
+
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "y"), tileSet.y);
+					glGetUniformLocation(shader_programme, "offsetx"), 1);
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), i);
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsety"), j);
+					glGetUniformLocation(shader_programme, "offsety"), 1);
 
 				// bind Texture
 				glActiveTexture(GL_TEXTURE0);
@@ -255,7 +242,48 @@ int main() {
 			}
 		}
 
-		
+
+		////GL_POSITION
+		//float tx = j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO;
+		//float ty = j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO;
+
+		////TEXTURE
+		//float CT = offsets[0];
+		//float RT = offsets[1];
+
+		//float TTW = 0;
+		//float TTH = 0;
+		//float sx = CT * TTW;
+		//float sy = RT * TTH;
+
+		//glm::mat4 transformation = glm::translate(
+		//	matrix_origem,
+		//	glm::vec3(
+		//		//j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
+		//		0.0f,
+		//		0.0f,
+		//		0.0f
+		//	)
+		//);
+
+		//glUniformMatrix4fv(
+		//	glGetUniformLocation(shader_programme, "matrix"), 1,
+		//	GL_FALSE, glm::value_ptr(glm::mat4(1)));
+		//glUniform1f(
+		//	glGetUniformLocation(shader_programme, "x"), tileSet.x);
+		//glUniform1f(
+		//	glGetUniformLocation(shader_programme, "y"), tileSet.y);
+		//glUniform1f(
+		//	glGetUniformLocation(shader_programme, "offsetx"), i);
+		//glUniform1f(
+		//	glGetUniformLocation(shader_programme, "offsety"), j);
+
+		//// bind Texture
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
+		//glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 		/*glUniform1f(
 			glGetUniformLocation(shader_programme, "offsetx"), 0);
 

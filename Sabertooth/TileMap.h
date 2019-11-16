@@ -3,9 +3,6 @@
 
 #include "TileSet.h"
 
-#include <fstream>
-#include <string>
-
 class TileMap
 {
 public:
@@ -20,6 +17,9 @@ public:
 	int TW;
 	int TW_CENTRO;
 
+	TileMap() {}
+	~TileMap() {}
+
 	TileMap (char* filePath, int numLinhas, int numColunas, TileSet tileset, int tile_height)
 	{
 		this->idTiles = new char unsigned*[numLinhas];
@@ -29,12 +29,14 @@ public:
 		}
 
 		std::ifstream file(filePath);
-		std::string line = "";
+		std::string line;
 
 		int i = numLinhas - 1, j = 0;
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
+			printf("%d\n", stoi(line));
 			j++;
+
 			if (j == numColunas) {
 				i--;
 				j = 0;
