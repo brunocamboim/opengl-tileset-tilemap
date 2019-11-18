@@ -108,10 +108,10 @@ int main() {
 	float C[] = { TW , TH / 2 };
 	float D[] = { TW / 2, 0 };
 
-	float AT[] = { 0.0f, 0.5f };
-	float BT[] = { 0.5f, 1.0f };
-	float CT[] = { 1.0f, 0.5f };
-	float DT[] = { 0.5f, 0.0f };
+	float AT[] = { 0.0f, 0.25f };
+	float BT[] = { 0.1f, 0.5f };
+	float CT[] = { 0.2f, 0.25f };
+	float DT[] = { 0.1f, 0.0f };
 
 	int moveX = 0;
 	int moveY = 0;
@@ -249,13 +249,13 @@ int main() {
 			{
 
 				float* offsets = tileMap.GetTileOffset(r, c);
-
-				diamond.desenhar(r, c, tileSet, 0, 0);
+				if (!teste) printf("%f - %f \n", offsets[0], offsets[0]);
+				diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
 
 			}
 		}
 
-
+		teste = true;
 		////GL_POSITION
 		//float tx = j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO;
 		//float ty = j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO;
