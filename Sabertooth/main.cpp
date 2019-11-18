@@ -23,7 +23,6 @@ int const TH = 40.0f;
 int const TH_CENTRO = TH / 2;
 int const TW = 2 * TH;
 int const TW_CENTRO = TW / 2;
-int const NUMBER_OF_ENEMYS = 4;
 
 float const NUM_COLUNAS = 10;
 float const NUM_LINHAS = 10;
@@ -32,6 +31,33 @@ float TELA_LARGURA = TW * NUM_COLUNAS;
 float TELA_ALTURA = TH * NUM_COLUNAS;
 
 glm::mat4 matrix_origem = glm::mat4(1);
+Diamond diamond;
+TileMap tileMap;
+TileSet tileSet;
+
+void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
+	if (action == GLFW_PRESS) {
+		switch (button)
+		{
+		case GLFW_MOUSE_BUTTON_LEFT:
+			double mx, my;
+			glfwGetCursorPos(window, &mx, &my);
+
+
+			double r, c, x0, y0;
+
+			r = my / tileMap.TH_CENTRO;
+			c = (mx - r * (tileMap.TW_CENTRO / 2)) / tileMap.TW;
+			printf("%f - %f\n\n", r, c);
+
+			/*col = ((2.0f * mx / tileMap.TW) + (2.0f * my / tileMap.TH)) / 2.0f;
+			row = (my / tileMap.TH + col);*/
+			//x0 = col * this->background_map.TW_CENTRO + row * this->background_map.TW_CENTRO;
+			//y0 = (col * this->background_map.TH_CENTRO - row * this->background_map.TH_CENTRO) + ((double)this->background_map.numLinhas * (double)this->background_map.TH_CENTRO) - this->background_map.TH_CENTRO;
+
+		}
+	}
+}
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 // actions are GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
@@ -88,7 +114,7 @@ int main() {
 	float DT[] = { 0.5f, 0.0f };
 
 	int moveX = 0;
-	int moveY = 200;
+	int moveY = 0;
 
 	float vertices[] = {
 		// Posicoes		// Textura	
@@ -132,12 +158,10 @@ int main() {
 		
 		"uniform mat4 matrix;"
 		"uniform mat4 proj;"
-		"uniform float layer_z;"
-		"uniform float tamanho;"
 		
 		"void main () {"
 			"texture_coords = texture_mapping;"
-			"gl_Position = proj * matrix * vec4(vertex_position, layer_z, tamanho);"
+			"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, 1.0f);"
 		"}";
 
 	const char* fragment_shader =
@@ -175,8 +199,10 @@ int main() {
 	glAttachShader(shader_programme, vs);
 	glLinkProgram(shader_programme);
 
-
 	glUseProgram(shader_programme);
+
+	glfwSetMouseButtonCallback(g_window, mouse_callback);
+	glfwSetKeyCallback(g_window, key_callback);
 
 	glm::mat4 proj = glm::ortho(0.0f, (float)SCR_WIDTH, (float)SCR_HEIGHT, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(
@@ -184,19 +210,28 @@ int main() {
 		GL_FALSE, glm::value_ptr(proj));
 
 
-	TileSet tileSet("bin/Images/tileset.png", 0.1f, 0.1f, 10, 58, 154.0f, 77.0f);
-	TileMap tileMap("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
+	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 2, 5, 42.0f, 76.0f);
+	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
 
-	printf("%f - %f - %d - %d - %f - %f\n", 
+	/*printf("%f - %f - %d - %d - %f - %f\n", 
 		tileSet.x, tileSet.y, tileSet.numColunas, tileSet.numLinhas, tileSet.alturaTiles, tileSet.larguraTiles);
 
 	printf("%d - %d - %d - %d - %d - %d\n",
-		tileMap.numLinhas, tileMap.numColunas, tileMap.TH, tileMap.TH_CENTRO, tileMap.TW, tileMap.TW_CENTRO);
+		tileMap.numLinhas, tileMap.numColunas, tileMap.TH, tileMap.TH_CENTRO, tileMap.TW, tileMap.TW_CENTRO);*/
 
-	Diamond diamond(shader_programme, tileMap);
+	/*for (int r = 0; r < tileMap.numLinhas; r++)
+	{
+		for (int c = tileMap.numColunas - 1; c >= 0; c--)
+		{
+			printf("%d \n", tileMap.idTiles[r][c]);
+		}
+	}*/
+
+	diamond.novo(shader_programme, tileMap);
 
 	glm::mat4 matrix_aux = glm::translate(glm::mat4(1), glm::vec3(20, 40, 0.0f));
 
+	bool teste = false;
 	while (!glfwWindowShouldClose(g_window))
 	{
 		processInput(g_window);
@@ -207,9 +242,7 @@ int main() {
 		glUseProgram(shader_programme);
 
 		glBindVertexArray(VAO);
-
-
-		bool teste = false;
+		
 		float* offsets;
 		for (int r = 0; r < tileMap.numLinhas; r++)
 		{
@@ -219,19 +252,21 @@ int main() {
 				//translação do tile (em x e y baseado em c e r)
 				float x = c * TW / 2 + r * TW / 2;
 				float y = c * TH / 2 - r * TH / 2;
+				y = y + (tileMap.numLinhas * tileMap.TH_CENTRO) + (tileMap.TH_CENTRO - tileSet.alturaTiles);
 				matrix_aux = glm::translate(glm::mat4(1), glm::vec3(x, y, 0.0f));
 
 				glUniformMatrix4fv(
 					glGetUniformLocation(shader_programme, "matrix"), 1,
 					GL_FALSE, glm::value_ptr(matrix_aux));
 
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "tamanho"), 1);
+				float* offsets = tileMap.GetTileOffset(r, c);
+
+				//printf("%f - %f \n\n", offsets[0], offsets[1]);
 
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), 1);
+					glGetUniformLocation(shader_programme, "offsetx"), 0);
 				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsety"), 1);
+					glGetUniformLocation(shader_programme, "offsety"), 0);
 
 				// bind Texture
 				glActiveTexture(GL_TEXTURE0);
@@ -265,36 +300,6 @@ int main() {
 		//		0.0f
 		//	)
 		//);
-
-		//glUniformMatrix4fv(
-		//	glGetUniformLocation(shader_programme, "matrix"), 1,
-		//	GL_FALSE, glm::value_ptr(glm::mat4(1)));
-		//glUniform1f(
-		//	glGetUniformLocation(shader_programme, "x"), tileSet.x);
-		//glUniform1f(
-		//	glGetUniformLocation(shader_programme, "y"), tileSet.y);
-		//glUniform1f(
-		//	glGetUniformLocation(shader_programme, "offsetx"), i);
-		//glUniform1f(
-		//	glGetUniformLocation(shader_programme, "offsety"), j);
-
-		//// bind Texture
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
-		//glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		/*glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), 0);
-
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), 1);
-		
-
-		glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
-		
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
-
 
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();

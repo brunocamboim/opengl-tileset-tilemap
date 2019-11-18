@@ -30,6 +30,17 @@ public:
 		this->larguraTiles = larguraTiles;
 	}
 
+	void novo(char* filePath, float x, float y, int numColunas, int numLinhas, float alturaTiles, float larguraTiles)
+	{
+		this->texture.loadTexture(filePath);
+		this->x = x;
+		this->y = y;
+		this->numColunas = numColunas;
+		this->numLinhas = numLinhas;
+		this->alturaTiles = alturaTiles;
+		this->larguraTiles = larguraTiles;
+	}
+
 	int TileSet::GetTextureID()
 	{
 		return this->texture.texture;

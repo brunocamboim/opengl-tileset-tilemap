@@ -34,9 +34,39 @@ public:
 		int i = numLinhas - 1, j = 0;
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
-			printf("%d\n", stoi(line));
 			j++;
+			//printf("%c - %d", this->idTiles[i][j], stoi(line));
+			if (j == numColunas) {
+				i--;
+				j = 0;
+			}
+		}
 
+		this->numColunas = numColunas;
+		this->numLinhas = numLinhas;
+		this->tileset = tileset;
+		this->TH = tile_height;
+		this->TH_CENTRO = TH / 2;
+		this->TW = 2 * TH;
+		this->TW_CENTRO = TW / 2;
+	}
+
+	void novo(char* filePath, int numLinhas, int numColunas, TileSet tileset, int tile_height)
+	{
+		this->idTiles = new char unsigned*[numLinhas];
+
+		for (int i = 0; i < numLinhas; i++) {
+			this->idTiles[i] = new char unsigned[numColunas];
+		}
+
+		std::ifstream file(filePath);
+		std::string line;
+
+		int i = numLinhas - 1, j = 0;
+		while (getline(file, line, ',')) {
+			this->idTiles[i][j] = stoi(line);
+			j++;
+			//printf("%c - %d", this->idTiles[i][j], stoi(line));
 			if (j == numColunas) {
 				i--;
 				j = 0;

@@ -1,14 +1,17 @@
 ﻿  main.cpp
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(66): warning C4838: a conversão de 'int' em 'float' requer uma conversão de restrição
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(64): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(65): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(96): warning C4838: a conversão de 'int' em 'float' requer uma conversão de restrição
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(94): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(95): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
 c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(12): warning C4005: 'EXIT_FAILURE': redefinição de macro
   c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdlib.h(49): note: consulte a definição anterior de 'EXIT_FAILURE'
 c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(22): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(188): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(220): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(221): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(213): warning C4101: 'offsets': variável local não referenciada
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(51): warning C4101: 'y0': variável local não referenciada
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(51): warning C4101: 'x0': variável local não referenciada
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(223): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(262): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(263): warning C4244: 'inicializando': conversão de 'int' para 'float', possível perda de dados
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\main.cpp(255): warning C4101: 'offsets': variável local não referenciada
+c:\users\bruno\documents\opengl\tileset_tilemap\sabertooth\tilemap.h(98): warning C4172: retornando o endereço da variável local ou temporário: offsets
   SOIL.lib(SOIL.obj) : MSIL .netmodule ou módulo compilado com /GL encontrado; reiniciando link com /LTCG; adicione /LTCG ao link da linha de comando para melhorar performance do vinculador
 LINK : warning LNK4075: ignorando '/INCREMENTAL' devido a especificaþÒo '/LTCG'
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library

@@ -18,7 +18,18 @@ public:
 	glm::mat4 matrix_origem;
 	TileMap background_map;
 
+	Diamond() {}
+	~Diamond() {}
+
 	Diamond(GLuint shader_programme, TileMap background_map)
+	{
+		this->matrix = glm::mat4(1);
+		this->matrix_origem = glm::mat4(1);
+		this->shader_programme = shader_programme;
+		this->background_map = background_map;
+	}
+
+	void novo(GLuint shader_programme, TileMap background_map)
 	{
 		this->matrix = glm::mat4(1);
 		this->matrix_origem = glm::mat4(1);
