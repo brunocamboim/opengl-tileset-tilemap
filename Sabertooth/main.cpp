@@ -250,7 +250,8 @@ int main() {
 
 				float* offsets = tileMap.GetTileOffset(r, c);
 				if (!teste) printf("%f - %f \n", offsets[0], offsets[0]);
-				diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
+				//diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
+				diamond.desenhar(r, c, tileSet, 1, 1);
 
 			}
 		}
