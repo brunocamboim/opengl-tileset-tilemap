@@ -210,7 +210,7 @@ int main() {
 		GL_FALSE, glm::value_ptr(proj));
 
 
-	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 2, 5, 42.0f, 76.0f);
+	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 2, 5, TH, TW);
 	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
 
 	/*printf("%f - %f - %d - %d - %f - %f\n", 
@@ -243,36 +243,14 @@ int main() {
 
 		glBindVertexArray(VAO);
 		
-		float* offsets;
 		for (int r = 0; r < tileMap.numLinhas; r++)
 		{
 			for (int c = tileMap.numColunas - 1; c >= 0; c--)
 			{
-				
-				//translação do tile (em x e y baseado em c e r)
-				float x = c * TW / 2 + r * TW / 2;
-				float y = c * TH / 2 - r * TH / 2;
-				y = y + (tileMap.numLinhas * tileMap.TH_CENTRO) + (tileMap.TH_CENTRO - tileSet.alturaTiles);
-				matrix_aux = glm::translate(glm::mat4(1), glm::vec3(x, y, 0.0f));
-
-				glUniformMatrix4fv(
-					glGetUniformLocation(shader_programme, "matrix"), 1,
-					GL_FALSE, glm::value_ptr(matrix_aux));
 
 				float* offsets = tileMap.GetTileOffset(r, c);
 
-				//printf("%f - %f \n\n", offsets[0], offsets[1]);
-
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsetx"), 0);
-				glUniform1f(
-					glGetUniformLocation(shader_programme, "offsety"), 0);
-
-				// bind Texture
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
-				glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				diamond.desenhar(r, c, tileSet, 0, 0);
 
 			}
 		}

@@ -37,35 +37,26 @@ public:
 		this->background_map = background_map;
 	}
 
-	void desenhar(float i, float j, TileSet tileset, float offsetx, float offsety)
+	void desenhar(float r, float c, TileSet tileSet, float offsetx, float offsety)
 	{
-		/*glm::mat4 transformation = glm::translate(
-			matrix_origem, 
-			glm::vec3(j * this->background_map.TW_CENTRO + i * this->background_map.TW_CENTRO, 
-				(j * this->background_map.TH_CENTRO - i * this->background_map.TH_CENTRO) 
-				+ 
-				(this->background_map.numLinhas * this->background_map.TH_CENTRO) 
-				+ 
-				this->background_map.TH_CENTRO - tileset.alturaTiles, 
-			0.0f));*/
-
-		this->matrix = matrix_origem;
+		//translação do tile (em x e y baseado em c e r)
+		float x = c * tileSet.larguraTiles / 2 + r * tileSet.larguraTiles / 2;
+		float y = c * tileSet.alturaTiles / 2 - r * tileSet.alturaTiles / 2;
+		y = y + (this->background_map.numLinhas * this->background_map.TH_CENTRO) + (this->background_map.TH_CENTRO - tileSet.alturaTiles);
+		this->matrix_origem = glm::translate(glm::mat4(1), glm::vec3(x, y, 0.0f));
 
 		glUniformMatrix4fv(
 			glGetUniformLocation(this->shader_programme, "matrix"), 1,
-			GL_FALSE, glm::value_ptr(this->matrix));
+			GL_FALSE, glm::value_ptr(matrix_origem));
 
 		glUniform1f(
-			glGetUniformLocation(shader_programme, "tamanho"), 1);
-
+			glGetUniformLocation(this->shader_programme, "offsetx"), offsetx);
 		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsetx"), offsetx);
-		glUniform1f(
-			glGetUniformLocation(shader_programme, "offsety"), offsety);
+			glGetUniformLocation(this->shader_programme, "offsety"), offsety);
 
 		// bind Texture
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tileset.GetTextureID());
+		glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
 		glUniform1i(glGetUniformLocation(this->shader_programme, "sprite"), 0);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
