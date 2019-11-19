@@ -48,7 +48,7 @@ void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
 
 			r = my / tileMap.TH_CENTRO;
 			c = (mx - r * (tileMap.TW_CENTRO / 2)) / tileMap.TW;
-			printf("%f - %f\n\n", r, c);
+			//printf("%f - %f\n\n", r, c);
 
 			/*col = ((2.0f * mx / tileMap.TW) + (2.0f * my / tileMap.TH)) / 2.0f;
 			row = (my / tileMap.TH + col);*/
@@ -210,7 +210,8 @@ int main() {
 		GL_FALSE, glm::value_ptr(proj));
 
 
-	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 2, 5, TH, TW);
+	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 5, 2, TH, TW);
+	//printf("%d", tileSet.numColunas);
 	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
 
 	/*printf("%f - %f - %d - %d - %f - %f\n", 
@@ -223,9 +224,10 @@ int main() {
 	{
 		for (int c = tileMap.numColunas - 1; c >= 0; c--)
 		{
-			printf("%d \n", tileMap.idTiles[r][c]);
+			printf("%d \n", tileMap.tiles_new[r][c]);
 		}
 	}*/
+	
 
 	diamond.novo(shader_programme, tileMap);
 
@@ -249,36 +251,15 @@ int main() {
 			{
 
 				float* offsets = tileMap.GetTileOffset(r, c);
-				if (!teste) printf("%f - %f \n", offsets[0], offsets[0]);
-				//diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
-				diamond.desenhar(r, c, tileSet, 1, 1);
+				//if (!teste) printf("%f - %f \n", offsets[0], offsets[1]);
+
+				diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
+				//diamond.desenhar(r, c, tileSet, 0, 0.5);
 
 			}
 		}
 
 		teste = true;
-		////GL_POSITION
-		//float tx = j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO;
-		//float ty = j * tileMap.TH_CENTRO - i * tileMap.TH_CENTRO;
-
-		////TEXTURE
-		//float CT = offsets[0];
-		//float RT = offsets[1];
-
-		//float TTW = 0;
-		//float TTH = 0;
-		//float sx = CT * TTW;
-		//float sy = RT * TTH;
-
-		//glm::mat4 transformation = glm::translate(
-		//	matrix_origem,
-		//	glm::vec3(
-		//		//j * tileMap.TW_CENTRO + i * tileMap.TW_CENTRO,
-		//		0.0f,
-		//		0.0f,
-		//		0.0f
-		//	)
-		//);
 
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();

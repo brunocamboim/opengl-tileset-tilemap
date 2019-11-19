@@ -8,6 +8,7 @@ class TileMap
 public:
 	
 	char unsigned ** idTiles;
+	int tiles_new[10][10];
 
 	int numLinhas;
 	int numColunas;
@@ -34,6 +35,7 @@ public:
 		int i = numLinhas - 1, j = 0;
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
+			this->tiles_new[i][j] = stoi(line);
 			j++;
 			//printf("%c - %d", this->idTiles[i][j], stoi(line));
 			if (j == numColunas) {
@@ -65,8 +67,9 @@ public:
 		int i = numLinhas - 1, j = 0;
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
+			this->tiles_new[i][j] = stoi(line);
 			j++;
-			//printf("%c - %d", this->idTiles[i][j], stoi(line));
+
 			if (j == numColunas) {
 				i--;
 				j = 0;
@@ -88,12 +91,16 @@ public:
 			return {};
 		}
 
-		char unsigned idTile = this->idTiles[i][j];
+		int idTile = (float) this->tiles_new[i][j];
 
-		float offsets[2] = {
-			idTile % this->tileset.numColunas,
-			idTile / this->tileset.numColunas
-		};
+		float x = (float) (idTile % this->tileset.numColunas) / tileset.numColunas;
+		float y = 0;
+		if (idTile >= tileset.numColunas) {
+			y = 0.5f;
+		}
+
+		printf("%f -- %f \n\n", x, y);
+		float offsets[2] = {x, y};
 
 		return offsets;
 	}
