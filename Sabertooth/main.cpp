@@ -8,6 +8,7 @@
 #include "TileMap.h"
 #include "TileSet.h"
 #include "Diamond.h"
+#include "Personagem.h"
 
 #define EXIT_FAILURE -1
 #define EXIT_SUCCESS 0
@@ -34,6 +35,7 @@ glm::mat4 matrix_origem = glm::mat4(1);
 Diamond diamond;
 TileMap tileMap;
 TileSet tileSet;
+Personagem personagem;
 
 void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
 	if (action == GLFW_PRESS) {
@@ -211,8 +213,10 @@ int main() {
 
 
 	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 5, 2, TH, TW);
-	//printf("%d", tileSet.numColunas);
 	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
+
+	//TileSet tileSetPersonagem("bin/Images/personagem.png", 0.1f, 0.1f, 5, 2, TH, TW);
+	//personagem.novo(5, 5, 0, 0, tileSetPersonagem);
 
 	/*printf("%f - %f - %d - %d - %f - %f\n", 
 		tileSet.x, tileSet.y, tileSet.numColunas, tileSet.numLinhas, tileSet.alturaTiles, tileSet.larguraTiles);
@@ -244,6 +248,8 @@ int main() {
 		glUseProgram(shader_programme);
 
 		glBindVertexArray(VAO);
+
+		//diamond.desenhar(personagem.rowActual, personagem.colActual, personagem.tileSet, personagem.offsetx, personagem.offsety);
 		
 		for (int r = 0; r < tileMap.numLinhas; r++)
 		{
