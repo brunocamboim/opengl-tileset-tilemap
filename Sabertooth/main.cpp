@@ -16,6 +16,8 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
+
+
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -100,6 +102,8 @@ int main() {
 		glfwTerminate();
 		return 1;
 	}
+
+	
 
 	glfwMakeContextCurrent(g_window);
 	// inicia manipulador da extensão GLEW
@@ -218,7 +222,7 @@ int main() {
 	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 5, 2, TH, TW);
 	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
 
-	tileSet2.novo("bin/Images/personagem.png", 0.5f, 0.5f, 2, 5, TH, TW);
+	tileSet2.novo("bin/Images/personagem.png", 0.5f, 0.5f, 5, 2, TH, TW);
 
 	//TileSet tileSetPersonagem("bin/Images/personagem.png", 0.1f, 0.1f, 5, 2, TH, TW);
 	//personagem.novo(5, 5, 0, 0, tileSetPersonagem);
@@ -244,8 +248,17 @@ int main() {
 
 	bool teste = false;
 
-	double movimentoX=0;
-	double movimentoY=9;
+	double movimentoX=1;
+	double movimentoY=8;
+
+	
+	double limiteEsquerda=8.9;
+	double limiteDireita=0;
+
+	double limiteEsquerdaSuperior=9.2;
+	double limiteEsquerdaInferior=8.5;
+	double limiteDireitaSuperior=0;
+	double limiteDireitaInferior=0.4;
 	
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -275,28 +288,64 @@ int main() {
 		}
 
 
+		
 		int stateD = glfwGetKey(g_window, GLFW_KEY_D);
 		int stateW = glfwGetKey(g_window, GLFW_KEY_W);
 		int stateA = glfwGetKey(g_window, GLFW_KEY_A);
 		int stateS = glfwGetKey(g_window, GLFW_KEY_S);
 
-
 		if (stateD == GLFW_PRESS) {
-			movimentoY -= 0.25;			
+			if (stateW == GLFW_PRESS && movimentoX < limiteEsquerdaSuperior) {
+				movimentoX += 0.015;
+			}
+			else if (stateS == GLFW_PRESS && movimentoY < limiteEsquerdaInferior) {
+				movimentoY += 0.015;
+			}
+			else if (movimentoX < limiteEsquerdaSuperior && movimentoY < limiteEsquerdaInferior){
+				movimentoX += 0.015;
+				movimentoY += 0.015;
+			}
 		}
 		else if (stateW == GLFW_PRESS) {
-
-			movimentoX += 0.25;
+			if (stateA == GLFW_PRESS && movimentoY > limiteDireitaSuperior) {
+				movimentoY -= 0.015;
+			}
+			else if (stateD == GLFW_PRESS && movimentoX < limiteEsquerdaSuperior) {
+				movimentoX += 0.015;
+			}
+			else if(movimentoY > limiteDireitaSuperior && movimentoX < limiteEsquerdaSuperior){
+				movimentoX += 0.015;
+				movimentoY -= 0.015;
+			}
+			
 
 		}
 		else if (stateA == GLFW_PRESS) {
-
-			movimentoY += 0.25;
+			if (stateW == GLFW_PRESS && movimentoY > limiteDireitaSuperior) {
+				movimentoY -= 0.015;
+			}
+			else if (stateS == GLFW_PRESS && movimentoX > limiteDireitaInferior) {
+				movimentoX -= 0.015;
+			}
+			else if (movimentoY > limiteDireitaSuperior && movimentoX > limiteDireitaInferior){
+				movimentoX -= 0.015;
+				movimentoY -= 0.015;
+			}
+			
 
 		}
 		else if (stateS == GLFW_PRESS) {
-
-			movimentoX -= 0.25;
+			if (stateA == GLFW_PRESS && movimentoX > limiteDireitaInferior) {
+				movimentoY += 0.015;
+			}
+			else if (stateD == GLFW_PRESS && movimentoY < limiteEsquerdaInferior) {
+				movimentoX -= 0.015;
+			}
+			else if (movimentoX > limiteDireitaInferior && movimentoY < limiteEsquerdaInferior){
+				movimentoX -= 0.015;
+				movimentoY += 0.015;
+			}
+			
 
 		}
 		diamond.desenhar(movimentoX, movimentoY, tileSet2, 1, 1);
