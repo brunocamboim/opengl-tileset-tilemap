@@ -35,6 +35,7 @@ glm::mat4 matrix_origem = glm::mat4(1);
 Diamond diamond;
 TileMap tileMap;
 TileSet tileSet;
+TileSet tileSet2;
 Personagem personagem;
 
 void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
@@ -180,13 +181,15 @@ int main() {
 
 		"void main () {"
 			"vec2 tc = vec2((texture_coords.x + offsetx), (texture_coords.y + offsety));"
-			"frag_color = texture(sprite, tc);"
-			/*"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"
+			"vec4 texel = texture(sprite, tc);"
+			/*"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"*/
 			"if (texel.a < 0.5) {"
 				"discard;"
 			"}"
-			"frag_color = texel;"*/
+			"frag_color = texel;"
 		"}";
+		
+
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs, 1, &vertex_shader, NULL);
@@ -215,6 +218,8 @@ int main() {
 	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 5, 2, TH, TW);
 	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
 
+	tileSet2.novo("bin/Images/personagem.png", 0.5f, 0.5f, 2, 5, TH, TW);
+
 	//TileSet tileSetPersonagem("bin/Images/personagem.png", 0.1f, 0.1f, 5, 2, TH, TW);
 	//personagem.novo(5, 5, 0, 0, tileSetPersonagem);
 
@@ -238,6 +243,10 @@ int main() {
 	glm::mat4 matrix_aux = glm::translate(glm::mat4(1), glm::vec3(20, 40, 0.0f));
 
 	bool teste = false;
+
+	double movimentoX=0;
+	double movimentoY=9;
+	
 	while (!glfwWindowShouldClose(g_window))
 	{
 		processInput(g_window);
@@ -264,6 +273,33 @@ int main() {
 
 			}
 		}
+
+
+		int stateD = glfwGetKey(g_window, GLFW_KEY_D);
+		int stateW = glfwGetKey(g_window, GLFW_KEY_W);
+		int stateA = glfwGetKey(g_window, GLFW_KEY_A);
+		int stateS = glfwGetKey(g_window, GLFW_KEY_S);
+
+
+		if (stateD == GLFW_PRESS) {
+			movimentoY -= 0.25;			
+		}
+		else if (stateW == GLFW_PRESS) {
+
+			movimentoX += 0.25;
+
+		}
+		else if (stateA == GLFW_PRESS) {
+
+			movimentoY += 0.25;
+
+		}
+		else if (stateS == GLFW_PRESS) {
+
+			movimentoX -= 0.25;
+
+		}
+		diamond.desenhar(movimentoX, movimentoY, tileSet2, 1, 1);
 
 		teste = true;
 
