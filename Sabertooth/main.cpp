@@ -38,6 +38,7 @@ Diamond diamond;
 TileMap tileMap;
 TileSet tileSet;
 TileSet tileSet2;
+TileSet inimigo;
 Personagem personagem;
 
 void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
@@ -224,6 +225,8 @@ int main() {
 
 	tileSet2.novo("bin/Images/personagem.png", 0.5f, 0.5f, 5, 2, TH, TW);
 
+	inimigo.novo("bin/Images/inimigo.png", 0.5f, 0.5f, 5, 2, TH, TW);
+
 	//TileSet tileSetPersonagem("bin/Images/personagem.png", 0.1f, 0.1f, 5, 2, TH, TW);
 	//personagem.novo(5, 5, 0, 0, tileSetPersonagem);
 
@@ -252,13 +255,45 @@ int main() {
 	double movimentoY=8;
 
 	
-	double limiteEsquerda=8.9;
-	double limiteDireita=0;
+	
 
 	double limiteEsquerdaSuperior=9.2;
 	double limiteEsquerdaInferior=8.5;
 	double limiteDireitaSuperior=0;
 	double limiteDireitaInferior=0.4;
+
+	float linhaInimigo[4];
+	linhaInimigo[0] = 7;
+	linhaInimigo[1] = 5;
+	linhaInimigo[2] = 5;
+	linhaInimigo[3] = 8;
+
+	float colunaInimigo[4];
+	colunaInimigo[0] = 7;
+	colunaInimigo[1] = 5;
+	colunaInimigo[2] = 5;
+	colunaInimigo[3] = 2;
+
+	
+	int movimentoInimigo[4];
+	//0=linha
+	movimentoInimigo[0] = 0;
+	//1=coluna
+	movimentoInimigo[1] = 1;
+	//2=linhaColuna
+	movimentoInimigo[2] = 2;
+	//3=persegueJogador
+	movimentoInimigo[3] = 3;
+
+
+	float anteriorInimigo[4];
+	anteriorInimigo[0] = -1;
+	anteriorInimigo[1] = -1;
+	anteriorInimigo[2] = 1;
+	anteriorInimigo[3] = -1;
+	
+
+
 	
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -349,6 +384,74 @@ int main() {
 
 		}
 		diamond.desenhar(movimentoX, movimentoY, tileSet2, 1, 1);
+
+		for (int i = 0; i < 4; i++) {			
+			if (movimentoInimigo[i] == 0) {				
+				if (linhaInimigo[i] < limiteEsquerdaSuperior && anteriorInimigo[i]>0) {					
+					linhaInimigo[i] += 0.015;					
+				}
+				else {
+					anteriorInimigo[i] = -1;
+				}
+				if (linhaInimigo[i] > limiteDireitaInferior && anteriorInimigo[i]<0) {
+					linhaInimigo[i] -= 0.015;
+				}
+				else {
+					anteriorInimigo[i] = 1;
+				}
+			}
+			else if (movimentoInimigo[i] == 1) {
+				if (colunaInimigo[i] < limiteEsquerdaInferior && anteriorInimigo[i]>0) {
+					colunaInimigo[i] += 0.015;
+				}
+				else {
+					anteriorInimigo[i] = -1;
+				}
+				if (colunaInimigo[i] > limiteDireitaSuperior && anteriorInimigo[i] < 0) {
+					colunaInimigo[i] -= 0.015;
+				}
+				else {
+					anteriorInimigo[i] = 1;
+				}
+			}
+			else if (movimentoInimigo[i] == 2) {
+				if (linhaInimigo[i] < limiteEsquerdaSuperior && colunaInimigo[i] < limiteEsquerdaInferior && anteriorInimigo[i]>0) {
+					linhaInimigo[i] += 0.015;
+					colunaInimigo[i] += 0.015;
+				}				
+				else {
+					anteriorInimigo[i] = -1;
+				}
+				if (linhaInimigo[i] > limiteDireitaSuperior && colunaInimigo[i] > limiteDireitaSuperior && anteriorInimigo[i] < 0) {
+					linhaInimigo[i] -= 0.015;
+					colunaInimigo[i] -= 0.015;
+				}
+				else {
+					anteriorInimigo[i] = 1;
+				}
+			}
+			/*
+			else if (movimentoInimigo[i] == 3) {
+				if (linhaInimigo[i] < movimentoX) {
+					linhaInimigo[i] += 0.010;
+					
+				}
+				else {
+					linhaInimigo[i] += 0.010;
+				}
+				if (colunaInimigo[i] < movimentoY) {
+					
+					colunaInimigo[i] += 0.010;
+				}
+				else {
+					colunaInimigo[i] += 0.010;
+				}
+			}
+			*/
+
+			diamond.desenhar(linhaInimigo[i], colunaInimigo[i], inimigo, 1, 1);
+		}
+		
 
 		teste = true;
 
