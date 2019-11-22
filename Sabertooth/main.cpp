@@ -328,7 +328,8 @@ int main() {
 		int stateW = glfwGetKey(g_window, GLFW_KEY_W);
 		int stateA = glfwGetKey(g_window, GLFW_KEY_A);
 		int stateS = glfwGetKey(g_window, GLFW_KEY_S);
-
+		float offsetx_personagem = 1;
+		float offsety_personagem = 1;
 		if (stateD == GLFW_PRESS) {
 			if (stateW == GLFW_PRESS && movimentoX < limiteEsquerdaSuperior) {
 				movimentoX += 0.015;
@@ -380,10 +381,12 @@ int main() {
 				movimentoX -= 0.015;
 				movimentoY += 0.015;
 			}
+			offsetx_personagem = 0.0f;
+			offsety_personagem = 0.4f;
 			
 
 		}
-		diamond.desenhar(movimentoX, movimentoY, tileSet2, 1, 1);
+		diamond.desenhar(movimentoX, movimentoY, tileSet2, offsetx_personagem, offsety_personagem);
 
 		for (int i = 0; i < 4; i++) {			
 			if (movimentoInimigo[i] == 0) {				
