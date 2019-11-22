@@ -292,8 +292,10 @@ int main() {
 	anteriorInimigo[2] = 1;
 	anteriorInimigo[3] = -1;
 	
-
-
+	double tempoAtual;
+	double animacaoPersonagem;
+	double animacaoPersonagemContador = glfwGetTime();
+	double movimento = 0;
 	
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -322,14 +324,28 @@ int main() {
 			}
 		}
 
+		tempoAtual= glfwGetTime();
+		animacaoPersonagem = tempoAtual - animacaoPersonagemContador;
 
+		if (animacaoPersonagem >= 0.20) {
+			animacaoPersonagemContador = glfwGetTime();
+			if (movimento == 0) {
+				movimento = 1;
+			}
+			else {
+				movimento = 0;
+			}
+		}
+		
 		
 		int stateD = glfwGetKey(g_window, GLFW_KEY_D);
 		int stateW = glfwGetKey(g_window, GLFW_KEY_W);
 		int stateA = glfwGetKey(g_window, GLFW_KEY_A);
 		int stateS = glfwGetKey(g_window, GLFW_KEY_S);
+
 		float offsetx_personagem = 1;
 		float offsety_personagem = 1;
+
 		if (stateD == GLFW_PRESS) {
 			if (stateW == GLFW_PRESS && movimentoX < limiteEsquerdaSuperior) {
 				movimentoX += 0.015;
@@ -341,6 +357,14 @@ int main() {
 				movimentoX += 0.015;
 				movimentoY += 0.015;
 			}
+
+			if (movimento == 0) {
+				offsetx_personagem = 0.6f;
+			}
+			else {
+				offsetx_personagem = 0.8f;
+			}
+			offsety_personagem = 0.4f;
 		}
 		else if (stateW == GLFW_PRESS) {
 			if (stateA == GLFW_PRESS && movimentoY > limiteDireitaSuperior) {
@@ -353,7 +377,14 @@ int main() {
 				movimentoX += 0.015;
 				movimentoY -= 0.015;
 			}
-			
+
+			if (movimento == 0) {
+				offsetx_personagem = 0.0f;
+			}
+			else {
+				offsetx_personagem = 0.2f;
+			}
+			offsety_personagem = 0.0f;
 
 		}
 		else if (stateA == GLFW_PRESS) {
@@ -367,6 +398,13 @@ int main() {
 				movimentoX -= 0.015;
 				movimentoY -= 0.015;
 			}
+			if (movimento == 0) {
+				offsetx_personagem = 0.6f;
+			}
+			else {
+				offsetx_personagem = 0.8f;
+			}
+			offsety_personagem = 0.0f;
 			
 
 		}
@@ -381,7 +419,13 @@ int main() {
 				movimentoX -= 0.015;
 				movimentoY += 0.015;
 			}
-			offsetx_personagem = 0.0f;
+			
+			if (movimento == 0) {
+				offsetx_personagem = 0.0f;
+			}
+			else {
+				offsetx_personagem = 0.2f;
+			}
 			offsety_personagem = 0.4f;
 			
 
@@ -433,24 +477,24 @@ int main() {
 					anteriorInimigo[i] = 1;
 				}
 			}
-			/*
+			
 			else if (movimentoInimigo[i] == 3) {
 				if (linhaInimigo[i] < movimentoX) {
-					linhaInimigo[i] += 0.010;
+					linhaInimigo[i] += 0.005;
 					
 				}
-				else {
-					linhaInimigo[i] += 0.010;
+				else if(linhaInimigo[i] > movimentoX){
+					linhaInimigo[i] -= 0.005;
 				}
 				if (colunaInimigo[i] < movimentoY) {
 					
-					colunaInimigo[i] += 0.010;
+					colunaInimigo[i] += 0.005;
 				}
-				else {
-					colunaInimigo[i] += 0.010;
+				else if(colunaInimigo[i] > movimentoY){
+					colunaInimigo[i] -= 0.005;
 				}
 			}
-			*/
+			
 
 			diamond.desenhar(linhaInimigo[i], colunaInimigo[i], inimigo, 1, 1);
 		}
