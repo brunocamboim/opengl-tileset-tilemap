@@ -258,10 +258,11 @@ int main() {
 		
 		"uniform mat4 matrix;"
 		"uniform mat4 proj;"
+		"uniform float tamanho;"
 		
 		"void main () {"
 			"texture_coords = texture_mapping;"
-			"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, 1.0f);"
+			"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, tamanho);"
 		"}";
 
 	const char* fragment_shader =
@@ -350,8 +351,8 @@ int main() {
 	double animacaoPersonagem;
 	double animacaoPersonagemContador = glfwGetTime();
 
-	float velocidadeMovimento = 0.01f;
-	float velocidadeMovimentoSeguidor = 0.005f;
+	float velocidadeMovimento = 0.005f;
+	float velocidadeMovimentoSeguidor = 0.002f;
 	
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -375,13 +376,16 @@ int main() {
 			glUniform1f(
 				glGetUniformLocation(shader_programme, "offsety"), 0);
 
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1.0f);
+
 			// bind Texture
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texture1);
 			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		}
-		else if (diamond.game_over) {
+		else if (diamond.game_over || diamond.numLifes == 0) {
 			glBindVertexArray(VAO3);
 
 			glUniformMatrix4fv(
@@ -392,6 +396,9 @@ int main() {
 				glGetUniformLocation(shader_programme, "offsetx"), 0);
 			glUniform1f(
 				glGetUniformLocation(shader_programme, "offsety"), 0);
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1.0f);
 
 			// bind Texture
 			glActiveTexture(GL_TEXTURE0);

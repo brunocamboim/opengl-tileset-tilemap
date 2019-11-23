@@ -49,7 +49,7 @@ public:
 		this->numLifes = 3;
 	}
 
-	void desenhar(float r, float c, TileSet tileSet, float offsetx, float offsety)
+	void desenhar(float r, float c, TileSet tileSet, float offsetx, float offsety, float tamanho = 1)
 	{
 		//translação do tile (em x e y baseado em c e r)
 		float x = c * tileSet.larguraTiles / 2 + r * tileSet.larguraTiles / 2;
@@ -66,6 +66,9 @@ public:
 		glUniform1f(
 			glGetUniformLocation(this->shader_programme, "offsety"), offsety);
 
+		glUniform1f(
+			glGetUniformLocation(this->shader_programme, "tamanho"), tamanho);
+
 		// bind Texture
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
@@ -75,15 +78,14 @@ public:
 
 	void desenharVida() {
 
-		desenhar(12.5f, 4.5f, this->tileSetLife, 0, 0);
-		/*if (this->numLifes == 3) {
-			this->DrawOnPosition(12.5f, 4.5f, this->tileSetLife, this->hitsFromEnemy, 0, nullptr);
-			this->DrawOnPosition(13.0f, 5.0f, this->tileSetLife, 0, 0, nullptr);
+		float numsY[] = {
+			2.5f,
+			3.5f,
+			4.5f
+		};
+		for (int i = 0; i < this->numLifes; i++) {
+			desenhar(11.5f, numsY[i], this->tileSetLife, 0, 0, 0.5f);
 		}
-		else {
-			this->DrawOnPosition(12.5f, 4.5f, this->tileSetLife, 2.0f, 0, nullptr);
-			this->DrawOnPosition(13.0f, 5.0f, this->tileSetLife, this->hitsFromEnemy % 3, 0, nullptr);
-		}*/
 	}
 
 	void tileWalking(float& c, float& r, int direction, float qtd)
