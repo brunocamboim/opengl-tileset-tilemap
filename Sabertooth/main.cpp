@@ -40,6 +40,7 @@ TileMap tileMapColision;
 TileSet tileSet;
 TileSet tileSetPersonagem;
 TileSet inimigo;
+TileSet tileSetLifes;
 Personagem personagem;
 Personagem inimigos[4];
 
@@ -319,7 +320,9 @@ int main() {
 
 	inimigo.novo("bin/Images/inimigo.png", 0.5f, 0.5f, 5, 2, TH, TW);
 
-	diamond.novo(shader_programme, tileMap);
+	tileSetLifes.novo("bin/Images/life.png", 0.1f, 0.1f, 3, 1, TH, TW);
+
+	diamond.novo(shader_programme, tileMap, tileSetLifes);
 
 	//-------------------- Define dados iniciais para o jogo ---------------
 
@@ -360,7 +363,7 @@ int main() {
 		
 		glUseProgram(shader_programme);
 
-		if (!diamond.game_win) {
+		if (diamond.game_win) {
 			glBindVertexArray(VAO2);
 
 			glUniformMatrix4fv(
@@ -399,6 +402,8 @@ int main() {
 		else {
 
 			glBindVertexArray(VAO);
+
+			diamond.desenharVida();
 
 			for (int r = 0; r < tileMap.numLinhas; r++)
 			{

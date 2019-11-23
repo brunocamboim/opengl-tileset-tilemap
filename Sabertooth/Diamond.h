@@ -17,6 +17,7 @@ public:
 	glm::mat4 matrix;
 	glm::mat4 matrix_origem;
 	TileMap background_map;
+	TileSet tileSetLife;
 	int numLifes;
 	bool game_win;
 	bool game_over;
@@ -24,23 +25,25 @@ public:
 	Diamond() {}
 	~Diamond() {}
 
-	Diamond(GLuint shader_programme, TileMap background_map)
+	Diamond(GLuint shader_programme, TileMap background_map, TileSet tileSetLife)
 	{
 		this->matrix = glm::mat4(1);
 		this->matrix_origem = glm::mat4(1);
 		this->shader_programme = shader_programme;
 		this->background_map = background_map;
+		this->tileSetLife = tileSetLife;
 		this->game_win = false;
 		this->game_over = false;
 		this->numLifes = 3;
 	}
 
-	void novo(GLuint shader_programme, TileMap background_map)
+	void novo(GLuint shader_programme, TileMap background_map, TileSet tileSetLife)
 	{
 		this->matrix = glm::mat4(1);
 		this->matrix_origem = glm::mat4(1);
 		this->shader_programme = shader_programme;
 		this->background_map = background_map;
+		this->tileSetLife = tileSetLife;
 		this->game_win = false;
 		this->game_over = false;
 		this->numLifes = 3;
@@ -68,6 +71,19 @@ public:
 		glBindTexture(GL_TEXTURE_2D, tileSet.GetTextureID());
 		glUniform1i(glGetUniformLocation(this->shader_programme, "sprite"), 0);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
+
+	void desenharVida() {
+
+		desenhar(12.5f, 4.5f, this->tileSetLife, 0, 0);
+		/*if (this->numLifes == 3) {
+			this->DrawOnPosition(12.5f, 4.5f, this->tileSetLife, this->hitsFromEnemy, 0, nullptr);
+			this->DrawOnPosition(13.0f, 5.0f, this->tileSetLife, 0, 0, nullptr);
+		}
+		else {
+			this->DrawOnPosition(12.5f, 4.5f, this->tileSetLife, 2.0f, 0, nullptr);
+			this->DrawOnPosition(13.0f, 5.0f, this->tileSetLife, this->hitsFromEnemy % 3, 0, nullptr);
+		}*/
 	}
 
 	void tileWalking(float& c, float& r, int direction, float qtd)
