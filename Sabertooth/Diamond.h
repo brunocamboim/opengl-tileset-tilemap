@@ -17,6 +17,9 @@ public:
 	glm::mat4 matrix;
 	glm::mat4 matrix_origem;
 	TileMap background_map;
+	int numLifes;
+	bool game_win;
+	bool game_over;
 
 	Diamond() {}
 	~Diamond() {}
@@ -27,6 +30,9 @@ public:
 		this->matrix_origem = glm::mat4(1);
 		this->shader_programme = shader_programme;
 		this->background_map = background_map;
+		this->game_win = false;
+		this->game_over = false;
+		this->numLifes = 3;
 	}
 
 	void novo(GLuint shader_programme, TileMap background_map)
@@ -35,6 +41,9 @@ public:
 		this->matrix_origem = glm::mat4(1);
 		this->shader_programme = shader_programme;
 		this->background_map = background_map;
+		this->game_win = false;
+		this->game_over = false;
+		this->numLifes = 3;
 	}
 
 	void desenhar(float r, float c, TileSet tileSet, float offsetx, float offsety)
@@ -61,5 +70,39 @@ public:
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
 
+	void tileWalking(float& c, float& r, int direction, float qtd)
+	{
+		switch (direction)
+		{
+		case 0: //NORTHEAST:
+			c = c + qtd;
+			break;
+		case 1: //EAST
+			c = c + qtd;
+			r = r + qtd;
+			break;
+		case 2: //SOUTHEAST
+			r = r + qtd;
+			break;
+		case 3: //SOUTH
+			c = c - qtd;
+			r = r + qtd;
+			break;
+		case 4: //SOUTHWEST
+			c = c - qtd;
+			break;
+		case 5: //WEST
+			c = c - qtd;
+			r = r - qtd;
+			break;
+		case 6: //NORTHWEST
+			r = r - qtd;
+			break;
+		case 7: //NORTH
+			c = c + qtd;
+			r = r - qtd;
+			break;
+		}
+	}
 };
 
