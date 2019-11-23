@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include "TileMap.h"
+#include "Personagem.h"
 
 // Classe utilizada para criar o formato diamante no jogo.
 class Diamond
@@ -122,5 +123,34 @@ public:
 			break;
 		}
 	}
+
+	bool checkCharactersColision(Personagem personagem, Personagem inimigo)
+	{
+
+		inimigo.rowActual = inimigo.rowActual - 0.1f;
+		inimigo.colActual = inimigo.colActual - 0.1f;
+		return round(inimigo.rowActual) == round(personagem.rowActual) && round(inimigo.colActual) == round(personagem.colActual);
+	}
+
+	void restart(Personagem& personagem, Personagem *inimigos) {
+		inimigos[0].rowActual = 7;
+		inimigos[1].rowActual = 5;
+		inimigos[2].rowActual = 5;
+		inimigos[3].rowActual = 8;
+
+		inimigos[0].colActual = 7;
+		inimigos[1].colActual = 5;
+		inimigos[2].colActual = 5;
+		inimigos[3].colActual = 2;
+
+		inimigos[0].movimento = 0;
+		inimigos[1].movimento = 1;
+		inimigos[2].movimento = 2;
+		inimigos[3].movimento = 3;
+
+		personagem.rowActual = 1;
+		personagem.colActual = 8;
+	}
+
 };
 

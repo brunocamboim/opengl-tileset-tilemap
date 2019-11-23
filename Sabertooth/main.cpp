@@ -353,6 +353,8 @@ int main() {
 
 	float velocidadeMovimento = 0.005f;
 	float velocidadeMovimentoSeguidor = 0.002f;
+
+	bool restart = false;
 	
 	while (!glfwWindowShouldClose(g_window))
 	{
@@ -363,6 +365,12 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		glUseProgram(shader_programme);
+
+		if (restart) {
+			
+
+			restart = false;
+		}
 
 		if (diamond.game_win) {
 			glBindVertexArray(VAO2);
@@ -559,6 +567,11 @@ int main() {
 					break;
 				}
 				diamond.desenhar(inimigos[i].rowActual, inimigos[i].colActual, inimigo, 1, 1);
+
+				if (diamond.checkCharactersColision(personagem, inimigos[i])) {
+					diamond.numLifes--;
+					diamond.restart(personagem, inimigos);
+				}
 			}
 		}
 		
