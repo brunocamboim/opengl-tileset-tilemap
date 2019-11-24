@@ -36,18 +36,45 @@ float TELA_ALTURA = TH * NUM_COLUNAS;
 glm::mat4 matrix_origem = glm::mat4(1);
 Diamond diamond;
 TileMap tileMap;
+TileMap tileMapColision;
 TileSet tileSet;
-TileSet tileSet2;
+TileSet tileSetPersonagem;
+TileSet tileSetPersonagemBola;
 TileSet inimigo;
+TileSet bola;
+TileSet tileSetLifes;
 Personagem personagem;
+Personagem inimigos[4];
+
+int pegouBola;
+
+enum Directions {
+	null = -1,
+	NORTHEAST = 0,
+	EAST = 1,
+	SOUTHEAST = 2,
+	SOUTH = 3,
+	SOUTHWEST = 4,
+	WEST = 5,
+	NORTHWEST = 6,
+	NORTH = 7
+};
+
+Directions direction = null;
 
 void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
+	
 	if (action == GLFW_PRESS) {
 		switch (button)
 		{
 		case GLFW_MOUSE_BUTTON_LEFT:
 			double mx, my;
 			glfwGetCursorPos(window, &mx, &my);
+			//printf("%f", mx);
+			//printf("%f", my);
+
+			pegouBola=diamond.clique(mx, my, personagem);
+			
 
 
 			double r, c, x0, y0;
@@ -68,43 +95,21 @@ void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 // actions are GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
 {
-	if (key == GLFW_KEY_LEFT)
-	{
-		
-	}
-	else if (key == GLFW_KEY_RIGHT)
-	{
-		
-	}
-	else if (key == GLFW_KEY_SPACE)
-	{
 
-	}
 }
 
-
 int main() {
-	
 
 	if (!glfwInit()) {
-		//fprintf(stderr, "ERROR: could not start GLFW3\n");
 		return 1;
 	}
-	/* Caso necessário, definições específicas para SOs, p. e. Apple OSX *
-	/* Definir como 3.2 para Apple OS X */
-	/*glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
+
 	GLFWwindow *g_window = glfwCreateWindow(
 		640, 480, "Teste de versão OpenGL", NULL, NULL);
 	if (!g_window) {
-		//fprintf(stderr, "ERROR: could not open window with GLFW3\n");
 		glfwTerminate();
 		return 1;
 	}
-
-	
 
 	glfwMakeContextCurrent(g_window);
 	// inicia manipulador da extensão GLEW
@@ -121,15 +126,20 @@ int main() {
 	float CT[] = { 0.2f, 0.25f };
 	float DT[] = { 0.1f, 0.0f };
 
-	int moveX = 0;
-	int moveY = 0;
-
 	float vertices[] = {
 		// Posicoes		// Textura	
-		A[0] + moveX, A[1] + moveY, 0.0f,	AT[0], AT[1],	// A
-		B[0] + moveX, B[1] + moveY, 0.0f,	BT[0], BT[1],	// B
-		C[0] + moveX, C[1] + moveY, 0.0f,	CT[0], CT[1],	// C
-		D[0] + moveX, D[1] + moveY, 0.0f,	DT[0], DT[1],	// D
+		A[0], A[1], 0.0f,	AT[0], AT[1],	// A
+		B[0], B[1], 0.0f,	BT[0], BT[1],	// B
+		C[0], C[1], 0.0f,	CT[0], CT[1],	// C
+		D[0], D[1], 0.0f,	DT[0], DT[1],	// D
+	};
+
+	float vertices1[] = {
+		// positions          // colors           // texture coords
+		800.0f, 600.0f, 0.0f,   1.0f, 1.0f, // buttom right
+		800.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top left
+		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // bottom left
+		0.0f, 600.0f, 0.0f,   0.0f, 1.0f //top right
 	};
 
 	unsigned int indices[] = {
@@ -158,6 +168,98 @@ int main() {
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	// -------- desenhar life ---------
+	unsigned int EBO2;
+	glGenBuffers(1, &EBO2);
+
+	unsigned int VBO2, VAO2;
+	glGenVertexArrays(1, &VAO2);
+	glBindVertexArray(VAO2);
+
+	glGenBuffers(1, &VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute		                //de quanto em quanto	//onde começa
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	unsigned int EBO3;
+	glGenBuffers(1, &EBO3);
+
+	unsigned int VBO3, VAO3;
+	glGenVertexArrays(1, &VAO3);
+	glBindVertexArray(VAO3);
+
+	glGenBuffers(1, &VBO3);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO3);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO3);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute		                //de quanto em quanto	//onde começa
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	unsigned int texture1, texture2;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+										   // set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+	int width, height, nrChannels;
+	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+	unsigned char *data = stbi_load("bin/Images/game_win.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+										   // set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+
+	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+	unsigned char *data1 = stbi_load("bin/Images/game_over.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data1);
+
 	const char* vertex_shader =
 		"#version 410\n"
 		"layout (location = 0) in vec2 vertex_position;"
@@ -166,10 +268,11 @@ int main() {
 		
 		"uniform mat4 matrix;"
 		"uniform mat4 proj;"
+		"uniform float tamanho;"
 		
 		"void main () {"
 			"texture_coords = texture_mapping;"
-			"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, 1.0f);"
+			"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, tamanho);"
 		"}";
 
 	const char* fragment_shader =
@@ -187,7 +290,6 @@ int main() {
 		"void main () {"
 			"vec2 tc = vec2((texture_coords.x + offsetx), (texture_coords.y + offsety));"
 			"vec4 texel = texture(sprite, tc);"
-			/*"vec4 texel = texture (sprite, vec2((texture_coords.x + offsetx) * imagem, texture_coords.y + offsety));"*/
 			"if (texel.a < 0.5) {"
 				"discard;"
 			"}"
@@ -222,81 +324,61 @@ int main() {
 
 	tileSet.novo("bin/Images/tileset.png", 0.1f, 0.1f, 5, 2, TH, TW);
 	tileMap.novo("bin/Images/tilemap.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
+	tileMapColision.novo("bin/Images/tilemapcolision.csv", NUM_LINHAS, NUM_COLUNAS, tileSet, TH);
 
-	tileSet2.novo("bin/Images/personagem.png", 0.5f, 0.5f, 5, 2, TH, TW);
+	tileSetPersonagem.novo("bin/Images/personagem.png", 0.5f, 0.5f, 5, 2, TH, TW);
+	tileSetPersonagemBola.novo("bin/Images/personagemBola.png", 0.5f, 0.5f, 5, 2, TH, TW);
+	//personagem.novo(1, 8, 1, 1, diamond.pegouBola ? tileSetPersonagem : tileSetPersonagemBola);
+	personagem.novo(1, 8, 1, 1, tileSetPersonagem);
+
 
 	inimigo.novo("bin/Images/inimigo.png", 0.5f, 0.5f, 5, 2, TH, TW);
-
-	//TileSet tileSetPersonagem("bin/Images/personagem.png", 0.1f, 0.1f, 5, 2, TH, TW);
-	//personagem.novo(5, 5, 0, 0, tileSetPersonagem);
-
-	/*printf("%f - %f - %d - %d - %f - %f\n", 
-		tileSet.x, tileSet.y, tileSet.numColunas, tileSet.numLinhas, tileSet.alturaTiles, tileSet.larguraTiles);
-
-	printf("%d - %d - %d - %d - %d - %d\n",
-		tileMap.numLinhas, tileMap.numColunas, tileMap.TH, tileMap.TH_CENTRO, tileMap.TW, tileMap.TW_CENTRO);*/
-
-	/*for (int r = 0; r < tileMap.numLinhas; r++)
-	{
-		for (int c = tileMap.numColunas - 1; c >= 0; c--)
-		{
-			printf("%d \n", tileMap.tiles_new[r][c]);
-		}
-	}*/
 	
+	bola.novo("bin/Images/bola.png", 0.5f, 0.5f, 5, 2, TH, TW);
 
-	diamond.novo(shader_programme, tileMap);
+	tileSetLifes.novo("bin/Images/life.png", 0.1f, 0.1f, 3, 1, TH, TW);
 
-	glm::mat4 matrix_aux = glm::translate(glm::mat4(1), glm::vec3(20, 40, 0.0f));
+	diamond.novo(shader_programme, tileMap, tileSetLifes);
 
-	bool teste = false;
+	//-------------------- Define dados iniciais para o jogo ---------------
 
-	double movimentoX=1;
-	double movimentoY=8;
+	double limiteEsquerdaSuperior = 9.2;
+	double limiteEsquerdaInferior = 8.5;
+	double limiteDireitaSuperior = 0;
+	double limiteDireitaInferior = 0.4;
 
+	inimigos[0].rowActual = 7;
+	inimigos[1].rowActual = 5;
+	inimigos[2].rowActual = 5;
+	inimigos[3].rowActual = 8;
+
+	inimigos[0].colActual = 7;
+	inimigos[1].colActual = 5;
+	inimigos[2].colActual = 5;
+	inimigos[3].colActual = 2;
 	
+	inimigos[0].movimento = 0;
+	inimigos[1].movimento = 1;
+	inimigos[2].movimento = 2;
+	inimigos[3].movimento = 3;
 	
+	double tempoAtual;
+	double animacaoPersonagem;
+	double animacaoPersonagemContador = glfwGetTime();
 
-	double limiteEsquerdaSuperior=9.2;
-	double limiteEsquerdaInferior=8.5;
-	double limiteDireitaSuperior=0;
-	double limiteDireitaInferior=0.4;
+	//float velocidadeMovimento = 0.005f;
+	//float velocidadeMovimentoSeguidor = 0.002f;
 
-	float linhaInimigo[4];
-	linhaInimigo[0] = 7;
-	linhaInimigo[1] = 5;
-	linhaInimigo[2] = 5;
-	linhaInimigo[3] = 8;
+	float velocidadeMovimento = 0.001f;
+	float velocidadeMovimentoSeguidor = 0.00005f;
 
-	float colunaInimigo[4];
-	colunaInimigo[0] = 7;
-	colunaInimigo[1] = 5;
-	colunaInimigo[2] = 5;
-	colunaInimigo[3] = 2;
+	bool restart = false;
 
-	
-	int movimentoInimigo[4];
-	//0=linha
-	movimentoInimigo[0] = 0;
-	//1=coluna
-	movimentoInimigo[1] = 1;
-	//2=linhaColuna
-	movimentoInimigo[2] = 2;
-	//3=persegueJogador
-	movimentoInimigo[3] = 3;
-
-
-	float anteriorInimigo[4];
-	anteriorInimigo[0] = -1;
-	anteriorInimigo[1] = -1;
-	anteriorInimigo[2] = 1;
-	anteriorInimigo[3] = -1;
-	
-
-
+	int cliqueCerto = 0;
 	
 	while (!glfwWindowShouldClose(g_window))
 	{
+
 		processInput(g_window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -304,157 +386,227 @@ int main() {
 		
 		glUseProgram(shader_programme);
 
-		glBindVertexArray(VAO);
+		if (restart) {			
 
-		//diamond.desenhar(personagem.rowActual, personagem.colActual, personagem.tileSet, personagem.offsetx, personagem.offsety);
+			restart = false;
+		}
+
+		if (diamond.game_win) {
+			glBindVertexArray(VAO2);
+
+			glUniformMatrix4fv(
+				glGetUniformLocation(shader_programme, "matrix"), 1,
+				GL_FALSE, glm::value_ptr(glm::mat4(1)));
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsetx"), 0);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsety"), 0);
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1.0f);
+
+			// bind Texture
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture1);
+			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		}
+		else if (diamond.game_over || diamond.numLifes == 0) {
+			glBindVertexArray(VAO3);
+
+			glUniformMatrix4fv(
+				glGetUniformLocation(shader_programme, "matrix"), 1,
+				GL_FALSE, glm::value_ptr(glm::mat4(1)));
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsetx"), 0);
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "offsety"), 0);
+
+			glUniform1f(
+				glGetUniformLocation(shader_programme, "tamanho"), 1.0f);
+
+			// bind Texture
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture2);
+			glUniform1i(glGetUniformLocation(shader_programme, "sprite"), 0);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		}
+
 		
-		for (int r = 0; r < tileMap.numLinhas; r++)
-		{
-			for (int c = tileMap.numColunas - 1; c >= 0; c--)
+
+
+		else {
+
+			glBindVertexArray(VAO);
+
+			diamond.desenharVida();
+
+			for (int r = 0; r < tileMap.numLinhas; r++)
 			{
+				for (int c = tileMap.numColunas - 1; c >= 0; c--)
+				{
 
-				float* offsets = tileMap.GetTileOffset(r, c);
-				//if (!teste) printf("%f - %f \n", offsets[0], offsets[1]);
+					float* offsets = tileMap.GetTileOffset(r, c);
+					diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
 
-				diamond.desenhar(r, c, tileSet, offsets[0], offsets[1]);
-				//diamond.desenhar(r, c, tileSet, 0, 0.5);
-
+				}
 			}
+
+			tempoAtual = glfwGetTime();
+			animacaoPersonagem = tempoAtual - animacaoPersonagemContador;
+
+			if(pegouBola==0)
+				diamond.desenhar(1, 1, bola, 1, 1);
+
+			if (animacaoPersonagem >= 0.20) {
+				animacaoPersonagemContador = glfwGetTime();
+				if (personagem.movimento == 0) {
+					personagem.movimento = 1;
+				}
+				else {
+					personagem.movimento = 0;
+				}
+			}
+
+			int stateD = glfwGetKey(g_window, GLFW_KEY_D);
+			int stateW = glfwGetKey(g_window, GLFW_KEY_W);
+			int stateA = glfwGetKey(g_window, GLFW_KEY_A);
+			int stateS = glfwGetKey(g_window, GLFW_KEY_S);
+
+			if (stateW == GLFW_PRESS) {
+				if (stateA == GLFW_PRESS) {
+					direction = SOUTHWEST;
+				}
+				else if (stateD == GLFW_PRESS) {
+					direction = SOUTHEAST;
+				}
+				else {
+					direction = SOUTH;
+				}
+				personagem.offsetx = personagem.movimento ? personagem.offsetx = 0.2f : personagem.offsetx = 0;
+				personagem.offsety = 0.0f;
+			}
+			else if (stateS == GLFW_PRESS) {
+				if (stateA == GLFW_PRESS) {
+					direction = NORTHWEST;
+				}
+				else if (stateD == GLFW_PRESS) {
+					direction = NORTHEAST;
+				}
+				else {
+					direction = NORTH;
+				}
+				personagem.offsetx = personagem.movimento ? personagem.offsetx = 0.2f : personagem.offsetx = 0;
+				personagem.offsety = 0.4f;
+			}
+			else if (stateD == GLFW_PRESS) {
+				direction = EAST;
+				personagem.offsetx = personagem.movimento ? personagem.offsetx = 0.8f : personagem.offsetx = 0.6f;
+				personagem.offsety = 0.4f;
+			}
+			else if (stateA == GLFW_PRESS) {
+				direction = WEST;
+				personagem.offsetx = personagem.movimento ? personagem.offsetx = 0.8f : personagem.offsetx = 0.6f;
+				personagem.offsety = 0.0f;
+			}
+			else {
+				direction = null;
+				personagem.offsetx = 0;
+				personagem.offsety = 0;
+			}
+
+			float row = personagem.rowActual;
+			float col = personagem.colActual;
+			diamond.tileWalking(col, row, direction, velocidadeMovimento);
+			bool colision = tileMapColision.checkColision(round(row), round(col));
+			if (!colision) {
+				personagem.rowActual = row;
+				personagem.colActual = col;
+			}
+			
+			diamond.desenhar(personagem.rowActual, personagem.colActual, pegouBola==0 ? tileSetPersonagem : tileSetPersonagemBola, personagem.offsetx, personagem.offsety);
+
+			for (int i = 0; i < 4; i++) {
+
+				switch (inimigos[i].movimento)
+				{
+				case 0:
+					if (inimigos[i].rowActual < limiteEsquerdaSuperior && inimigos[i].anterior > 0) {
+						inimigos[i].rowActual += velocidadeMovimento;
+					}
+					else {
+						inimigos[i].anterior = -1;
+					}
+					if (inimigos[i].rowActual > limiteDireitaInferior && inimigos[i].anterior < 0) {
+						inimigos[i].rowActual -= velocidadeMovimento;
+					}
+					else {
+						inimigos[i].anterior = 1;
+					}
+					break;
+				case 1:
+					if (inimigos[i].colActual < limiteEsquerdaInferior && inimigos[i].anterior > 0) {
+						inimigos[i].colActual += velocidadeMovimento;
+					}
+					else {
+						inimigos[i].anterior = -1;
+					}
+					if (inimigos[i].colActual > limiteDireitaSuperior && inimigos[i].anterior < 0) {
+						inimigos[i].colActual -= velocidadeMovimento;
+					}
+					else {
+						inimigos[i].anterior = 1;
+					}
+					break;
+				case 2:
+					if (inimigos[i].rowActual < limiteEsquerdaSuperior && inimigos[i].colActual < limiteEsquerdaInferior && inimigos[i].anterior > 0) {
+						inimigos[i].rowActual += velocidadeMovimento;
+						inimigos[i].colActual += velocidadeMovimento;
+					}
+					else {
+						inimigos[i].anterior = -1;
+					}
+					if (inimigos[i].rowActual > limiteDireitaSuperior && inimigos[i].colActual > limiteDireitaSuperior && inimigos[i].anterior < 0) {
+						inimigos[i].rowActual -= velocidadeMovimento;
+						inimigos[i].colActual -= velocidadeMovimento;
+					}
+					else {
+						inimigos[i].anterior = 1;
+					}
+					break;
+				case 3:
+					if (inimigos[i].rowActual < personagem.rowActual) {
+						inimigos[i].rowActual += velocidadeMovimentoSeguidor;
+
+					}
+					else if (inimigos[i].rowActual > personagem.rowActual) {
+						inimigos[i].rowActual -= velocidadeMovimentoSeguidor;
+					}
+					if (inimigos[i].colActual < personagem.colActual) {
+						inimigos[i].colActual += velocidadeMovimentoSeguidor;
+					}
+					else if (inimigos[i].colActual > personagem.colActual) {
+						inimigos[i].colActual -= velocidadeMovimentoSeguidor;
+					}
+					break;
+				}
+				diamond.desenhar(inimigos[i].rowActual, inimigos[i].colActual, inimigo, 1, 1);
+
+				if (diamond.checkCharactersColision(personagem, inimigos[i])) {
+					diamond.numLifes--;
+					diamond.restart(personagem, inimigos);
+					pegouBola = 0;
+				}
+
+
+				
+			}
+
+			
 		}
-
-
 		
-		int stateD = glfwGetKey(g_window, GLFW_KEY_D);
-		int stateW = glfwGetKey(g_window, GLFW_KEY_W);
-		int stateA = glfwGetKey(g_window, GLFW_KEY_A);
-		int stateS = glfwGetKey(g_window, GLFW_KEY_S);
-
-		if (stateD == GLFW_PRESS) {
-			if (stateW == GLFW_PRESS && movimentoX < limiteEsquerdaSuperior) {
-				movimentoX += 0.015;
-			}
-			else if (stateS == GLFW_PRESS && movimentoY < limiteEsquerdaInferior) {
-				movimentoY += 0.015;
-			}
-			else if (movimentoX < limiteEsquerdaSuperior && movimentoY < limiteEsquerdaInferior){
-				movimentoX += 0.015;
-				movimentoY += 0.015;
-			}
-		}
-		else if (stateW == GLFW_PRESS) {
-			if (stateA == GLFW_PRESS && movimentoY > limiteDireitaSuperior) {
-				movimentoY -= 0.015;
-			}
-			else if (stateD == GLFW_PRESS && movimentoX < limiteEsquerdaSuperior) {
-				movimentoX += 0.015;
-			}
-			else if(movimentoY > limiteDireitaSuperior && movimentoX < limiteEsquerdaSuperior){
-				movimentoX += 0.015;
-				movimentoY -= 0.015;
-			}
-			
-
-		}
-		else if (stateA == GLFW_PRESS) {
-			if (stateW == GLFW_PRESS && movimentoY > limiteDireitaSuperior) {
-				movimentoY -= 0.015;
-			}
-			else if (stateS == GLFW_PRESS && movimentoX > limiteDireitaInferior) {
-				movimentoX -= 0.015;
-			}
-			else if (movimentoY > limiteDireitaSuperior && movimentoX > limiteDireitaInferior){
-				movimentoX -= 0.015;
-				movimentoY -= 0.015;
-			}
-			
-
-		}
-		else if (stateS == GLFW_PRESS) {
-			if (stateA == GLFW_PRESS && movimentoX > limiteDireitaInferior) {
-				movimentoY += 0.015;
-			}
-			else if (stateD == GLFW_PRESS && movimentoY < limiteEsquerdaInferior) {
-				movimentoX -= 0.015;
-			}
-			else if (movimentoX > limiteDireitaInferior && movimentoY < limiteEsquerdaInferior){
-				movimentoX -= 0.015;
-				movimentoY += 0.015;
-			}
-			
-
-		}
-		diamond.desenhar(movimentoX, movimentoY, tileSet2, 1, 1);
-
-		for (int i = 0; i < 4; i++) {			
-			if (movimentoInimigo[i] == 0) {				
-				if (linhaInimigo[i] < limiteEsquerdaSuperior && anteriorInimigo[i]>0) {					
-					linhaInimigo[i] += 0.015;					
-				}
-				else {
-					anteriorInimigo[i] = -1;
-				}
-				if (linhaInimigo[i] > limiteDireitaInferior && anteriorInimigo[i]<0) {
-					linhaInimigo[i] -= 0.015;
-				}
-				else {
-					anteriorInimigo[i] = 1;
-				}
-			}
-			else if (movimentoInimigo[i] == 1) {
-				if (colunaInimigo[i] < limiteEsquerdaInferior && anteriorInimigo[i]>0) {
-					colunaInimigo[i] += 0.015;
-				}
-				else {
-					anteriorInimigo[i] = -1;
-				}
-				if (colunaInimigo[i] > limiteDireitaSuperior && anteriorInimigo[i] < 0) {
-					colunaInimigo[i] -= 0.015;
-				}
-				else {
-					anteriorInimigo[i] = 1;
-				}
-			}
-			else if (movimentoInimigo[i] == 2) {
-				if (linhaInimigo[i] < limiteEsquerdaSuperior && colunaInimigo[i] < limiteEsquerdaInferior && anteriorInimigo[i]>0) {
-					linhaInimigo[i] += 0.015;
-					colunaInimigo[i] += 0.015;
-				}				
-				else {
-					anteriorInimigo[i] = -1;
-				}
-				if (linhaInimigo[i] > limiteDireitaSuperior && colunaInimigo[i] > limiteDireitaSuperior && anteriorInimigo[i] < 0) {
-					linhaInimigo[i] -= 0.015;
-					colunaInimigo[i] -= 0.015;
-				}
-				else {
-					anteriorInimigo[i] = 1;
-				}
-			}
-			/*
-			else if (movimentoInimigo[i] == 3) {
-				if (linhaInimigo[i] < movimentoX) {
-					linhaInimigo[i] += 0.010;
-					
-				}
-				else {
-					linhaInimigo[i] += 0.010;
-				}
-				if (colunaInimigo[i] < movimentoY) {
-					
-					colunaInimigo[i] += 0.010;
-				}
-				else {
-					colunaInimigo[i] += 0.010;
-				}
-			}
-			*/
-
-			diamond.desenhar(linhaInimigo[i], colunaInimigo[i], inimigo, 1, 1);
-		}
-		
-
-		teste = true;
-
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();
 

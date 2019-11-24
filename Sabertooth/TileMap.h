@@ -8,8 +8,6 @@ class TileMap
 public:
 	
 	char unsigned ** idTiles;
-	int tiles_new[10][10];
-
 	int numLinhas;
 	int numColunas;
 	TileSet tileset;
@@ -35,9 +33,7 @@ public:
 		int i = numLinhas - 1, j = 0;
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
-			this->tiles_new[i][j] = stoi(line);
 			j++;
-			//printf("%c - %d", this->idTiles[i][j], stoi(line));
 			if (j == numColunas) {
 				i--;
 				j = 0;
@@ -67,7 +63,6 @@ public:
 		int i = numLinhas - 1, j = 0;
 		while (getline(file, line, ',')) {
 			this->idTiles[i][j] = stoi(line);
-			this->tiles_new[i][j] = stoi(line);
 			j++;
 
 			if (j == numColunas) {
@@ -91,7 +86,7 @@ public:
 			return {};
 		}
 
-		int idTile = (float) this->tiles_new[i][j];
+		int idTile = (float) this->idTiles[i][j];
 
 		float x = (float) (idTile % this->tileset.numColunas) / tileset.numColunas;
 		float y = 0;
@@ -99,10 +94,24 @@ public:
 			y = 0.5f;
 		}
 
-		printf("%f -- %f \n\n", x, y);
 		float offsets[2] = {x, y};
 
 		return offsets;
+	}
+
+	bool checkColision(int row, int col) {
+		
+		for (int i = 0; i < numLinhas; i++) {
+			for (int j = 0; j < numColunas; j++) {
+				if (this->idTiles[i][j] == 1) {
+					if (i == row && j == col) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 }; 
 

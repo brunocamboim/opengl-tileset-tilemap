@@ -1,33 +1,19 @@
-﻿  Layer.cpp
-  Shader.cpp
-  System.cpp
-  Texture.cpp
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\Texture.cpp(20,13): warning C4101: 'height': variável local não referenciada
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\Texture.cpp(20,6): warning C4101: 'width': variável local não referenciada
-  main.cpp
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\Texture.cpp(21,17): warning C4101: 'image': variável local não referenciada
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\TileMap.h(94,14): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+﻿  main.cpp
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\TileMap.h(89,14): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
 C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(13,1): warning C4005: 'EXIT_FAILURE': redefinição de macro
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h(49): message : consulte a definição anterior de 'EXIT_FAILURE'
 C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(25,16): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(53,21): warning C4101: 'y0': variável local não referenciada
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(53,17): warning C4101: 'x0': variável local não referenciada
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(224,53): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(224,41): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(319,25): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(319,22): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(386,32): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(386,20): warning C4244: 'argumento': conversão de 'double' para 'float', possível perda de dados
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(391,30): warning C4305: '+=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(397,30): warning C4305: '-=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(405,31): warning C4305: '+=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(411,31): warning C4305: '-=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(419,30): warning C4305: '+=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(420,31): warning C4305: '+=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(426,30): warning C4305: '-=': truncamento de 'double' para 'float'
-  Gerando Código...
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(427,31): warning C4305: '-=': truncamento de 'double' para 'float'
-C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\TileMap.h(105): warning C4172: retornando o endereço da variável local ou temporário: offsets
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(80,21): warning C4101: 'y0': variável local não referenciada
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(80,17): warning C4101: 'x0': variável local não referenciada
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(326,53): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(326,41): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(327,69): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(327,57): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(452,26): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(452,23): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(523,67): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\main.cpp(523,55): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\Desktop\projetos\opengl-tileset-tilemap\Sabertooth\TileMap.h(99): warning C4172: retornando o endereço da variável local ou temporário: offsets
   SOIL.lib(SOIL.obj) : MSIL .netmodule ou módulo compilado com /GL encontrado; reiniciando link com /LTCG; adicione /LTCG ao link da linha de comando para melhorar performance do vinculador
 LINK : warning LNK4075: ignorando '/INCREMENTAL' devido a especificaþÒo '/LTCG'
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
