@@ -1,25 +1,44 @@
 ﻿  main.cpp
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\tilemap.h(89): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\tilemap.h(123): warning C4244: '=': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\tilemap.h(124): warning C4244: '=': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(13): warning C4005: 'EXIT_FAILURE': redefinição de macro
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdlib.h(49): note: consulte a definição anterior de 'EXIT_FAILURE'
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(25): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(80): warning C4101: 'y0': variável local não referenciada
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(80): warning C4101: 'x0': variável local não referenciada
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(326): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(327): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(452): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(523): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\main.cpp(531): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
-c:\users\bruno\documents\opengl\opengl-tileset-tilemap\sabertooth\tilemap.h(99): warning C4172: retornando o endereço da variável local ou temporário: offsets
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\TileMap.h(89,14): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\TileMap.h(123,13): warning C4244: '=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\TileMap.h(124,12): warning C4244: '=': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(13,1): warning C4005: 'EXIT_FAILURE': redefinição de macro
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h(49): message : consulte a definição anterior de 'EXIT_FAILURE'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(25,16): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(80,21): warning C4101: 'y0': variável local não referenciada
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(80,17): warning C4101: 'x0': variável local não referenciada
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(326,53): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(326,41): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(327,69): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(327,57): warning C4244: 'argumento': conversão de 'const float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(476,26): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(476,23): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(547,67): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(547,55): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(555,57): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(555,45): warning C4244: 'argumento': conversão de 'float' para 'int', possível perda de dados
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(579,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(592,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(595,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(596,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(699,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(700,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(703,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(704,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(709,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(713,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(724,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(731,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(734,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\main.cpp(735,33): warning C4305: '=': truncamento de 'double' para 'float'
+C:\Users\natan\source\repos\opengl-tileset-tilemap\Sabertooth\TileMap.h(99): warning C4172: retornando o endereço da variável local ou temporário: offsets
   SOIL.lib(SOIL.obj) : MSIL .netmodule ou módulo compilado com /GL encontrado; reiniciando link com /LTCG; adicione /LTCG ao link da linha de comando para melhorar performance do vinculador
 LINK : warning LNK4075: ignorando '/INCREMENTAL' devido a especificaþÒo '/LTCG'
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
   Gerando c¾digo
   Finalizada a geraþÒo de c¾digo
-SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(SOIL.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(stb_image_aug.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_helper.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_DXT.obj)' ou no 'C:\Users\bruno\Documents\OpenGL\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
-  Sabertooth.vcxproj -> C:\Users\bruno\Documents\OpenGL\opengl-tileset-tilemap\x64\Debug\Sabertooth.exe
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(SOIL.obj)' ou no 'C:\Users\natan\source\repos\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(stb_image_aug.obj)' ou no 'C:\Users\natan\source\repos\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_helper.obj)' ou no 'C:\Users\natan\source\repos\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc110.pdb' nÒo foi encontrado 'SOIL.lib(image_DXT.obj)' ou no 'C:\Users\natan\source\repos\opengl-tileset-tilemap\x64\Debug\vc110.pdb'; vinculando objeto quando quando sem nenhuma informaþÒo de depuraþÒo
+  Sabertooth.vcxproj -> C:\Users\natan\source\repos\opengl-tileset-tilemap\x64\Debug\Sabertooth.exe

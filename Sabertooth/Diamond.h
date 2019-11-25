@@ -55,10 +55,7 @@ public:
 	}
 
 	int clique(double linha, double coluna, Personagem personagem) {
-		printf("%f\n", linha);
-		printf("%f\n", coluna);
-		printf("%f\n", personagem.colActual);
-		printf("%f\n", personagem.rowActual);
+		
 
 		int pegouBola;
 		if (linha > 60 && linha < 130 && coluna > 150 && coluna < 175 && personagem.colActual < 2 && personagem.rowActual < 2) {
@@ -68,7 +65,7 @@ public:
 			pegouBola = 0;
 		}
 		
-		printf("%i\n", pegouBola);
+		
 		return pegouBola;
 		
 
@@ -167,20 +164,41 @@ public:
 			this->game_win = true;
 		}
 
+
 		inimigos[0].rowActual = 7;
 		inimigos[1].rowActual = 5;
 		inimigos[2].rowActual = 5;
-		inimigos[3].rowActual = 8;
+		inimigos[3].rowActual = 2;
+		inimigos[4].rowActual = 9;
+		inimigos[5].rowActual = 9;
 
 		inimigos[0].colActual = 7;
 		inimigos[1].colActual = 5;
 		inimigos[2].colActual = 5;
-		inimigos[3].colActual = 2;
+		inimigos[3].colActual = 1;
+		inimigos[4].colActual = 0;
+		inimigos[5].colActual = 9;
 
 		inimigos[0].movimento = 0;
 		inimigos[1].movimento = 1;
 		inimigos[2].movimento = 2;
 		inimigos[3].movimento = 3;
+		inimigos[4].movimento = 3;
+		inimigos[5].movimento = 3;
+
+		inimigos[0].offsetx = 1;
+		inimigos[1].offsetx = 1;
+		inimigos[2].offsetx = 1;
+		inimigos[3].offsetx = 1;
+		inimigos[4].offsetx = 1;
+		inimigos[5].offsetx = 1;
+
+		inimigos[0].offsety = 1;
+		inimigos[1].offsety = 1;
+		inimigos[2].offsety = 1;
+		inimigos[3].offsety = 1;
+		inimigos[4].offsety = 1;
+		inimigos[5].offsety = 1;
 
 		personagem.rowActual = 1;
 		personagem.colActual = 8;

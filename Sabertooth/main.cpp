@@ -14,7 +14,7 @@
 #define EXIT_SUCCESS 0
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow* window);
 
 
 
@@ -44,7 +44,7 @@ TileSet inimigo;
 TileSet bola;
 TileSet tileSetLifes;
 Personagem personagem;
-Personagem inimigos[4];
+Personagem inimigos[6];
 
 int pegouBola;
 
@@ -62,8 +62,8 @@ enum Directions {
 
 Directions direction = null;
 
-void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
-	
+void mouse_callback(GLFWwindow* window, int button, int action, int mods) {
+
 	if (action == GLFW_PRESS) {
 		switch (button)
 		{
@@ -73,8 +73,8 @@ void mouse_callback(GLFWwindow * window, int button, int action, int mods) {
 			//printf("%f", mx);
 			//printf("%f", my);
 
-			pegouBola=diamond.clique(mx, my, personagem);
-			
+			pegouBola = diamond.clique(mx, my, personagem);
+
 
 
 			double r, c, x0, y0;
@@ -104,7 +104,7 @@ int main() {
 		return 1;
 	}
 
-	GLFWwindow *g_window = glfwCreateWindow(
+	GLFWwindow* g_window = glfwCreateWindow(
 		640, 480, "Teste de versão OpenGL", NULL, NULL);
 	if (!g_window) {
 		glfwTerminate();
@@ -224,7 +224,7 @@ int main() {
 	// load image, create texture and generate mipmaps
 	int width, height, nrChannels;
 	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data = stbi_load("bin/Images/game_win.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	unsigned char* data = stbi_load("bin/Images/game_win.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -248,7 +248,7 @@ int main() {
 	// load image, create texture and generate mipmaps
 
 	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data1 = stbi_load("bin/Images/game_over.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
+	unsigned char* data1 = stbi_load("bin/Images/game_over.png", &width, &height, &nrChannels, SOIL_LOAD_RGBA);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data1);
@@ -265,14 +265,14 @@ int main() {
 		"layout (location = 0) in vec2 vertex_position;"
 		"layout (location = 1) in vec2 texture_mapping;"
 		"out vec2 texture_coords;"
-		
+
 		"uniform mat4 matrix;"
 		"uniform mat4 proj;"
 		"uniform float tamanho;"
-		
+
 		"void main () {"
-			"texture_coords = texture_mapping;"
-			"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, tamanho);"
+		"texture_coords = texture_mapping;"
+		"gl_Position = proj * matrix * vec4(vertex_position, 0.0f, tamanho);"
 		"}";
 
 	const char* fragment_shader =
@@ -288,14 +288,14 @@ int main() {
 		"out vec4 frag_color;"
 
 		"void main () {"
-			"vec2 tc = vec2((texture_coords.x + offsetx), (texture_coords.y + offsety));"
-			"vec4 texel = texture(sprite, tc);"
-			"if (texel.a < 0.5) {"
-				"discard;"
-			"}"
-			"frag_color = texel;"
+		"vec2 tc = vec2((texture_coords.x + offsetx), (texture_coords.y + offsety));"
+		"vec4 texel = texture(sprite, tc);"
+		"if (texel.a < 0.5) {"
+		"discard;"
+		"}"
+		"frag_color = texel;"
 		"}";
-		
+
 
 
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -333,7 +333,7 @@ int main() {
 
 
 	inimigo.novo("bin/Images/inimigo.png", 0.5f, 0.5f, 5, 2, TH, TW);
-	
+
 	bola.novo("bin/Images/bola.png", 0.5f, 0.5f, 5, 2, TH, TW);
 
 	tileSetLifes.novo("bin/Images/life.png", 0.1f, 0.1f, 3, 1, TH, TW);
@@ -350,32 +350,53 @@ int main() {
 	inimigos[0].rowActual = 7;
 	inimigos[1].rowActual = 5;
 	inimigos[2].rowActual = 5;
-	inimigos[3].rowActual = 8;
+	inimigos[3].rowActual = 2;
+	inimigos[4].rowActual = 9;
+	inimigos[5].rowActual = 9;
 
 	inimigos[0].colActual = 7;
 	inimigos[1].colActual = 5;
 	inimigos[2].colActual = 5;
-	inimigos[3].colActual = 2;
-	
+	inimigos[3].colActual = 1;
+	inimigos[4].colActual = 0;
+	inimigos[5].colActual = 9;
+
 	inimigos[0].movimento = 0;
 	inimigos[1].movimento = 1;
 	inimigos[2].movimento = 2;
 	inimigos[3].movimento = 3;
-	
+	inimigos[4].movimento = 3;
+	inimigos[5].movimento = 3;
+
+	inimigos[0].offsetx = 1;
+	inimigos[1].offsetx = 1;
+	inimigos[2].offsetx = 1;
+	inimigos[3].offsetx = 1;
+	inimigos[4].offsetx = 1;
+	inimigos[5].offsetx = 1;
+
+	inimigos[0].offsety = 1;
+	inimigos[1].offsety = 1;
+	inimigos[2].offsety = 1;
+	inimigos[3].offsety = 1;
+	inimigos[4].offsety = 1;
+	inimigos[5].offsety = 1;
+
+	//offset inimigo
+	double inimigoRow = 1;
+	double inimigoCol = 1;
+
 	double tempoAtual;
 	double animacaoPersonagem;
 	double animacaoPersonagemContador = glfwGetTime();
 
-	float velocidadeMovimento = 0.005f;
-	float velocidadeMovimentoSeguidor = 0.002f;
-/*
 	float velocidadeMovimento = 0.001f;
-	float velocidadeMovimentoSeguidor = 0.00005f;*/
+	float velocidadeMovimentoSeguidor = 0.0004f;
 
 	bool restart = false;
 
 	int cliqueCerto = 0;
-	
+
 	while (!glfwWindowShouldClose(g_window))
 	{
 
@@ -383,10 +404,10 @@ int main() {
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		glUseProgram(shader_programme);
 
-		if (restart) {			
+		if (restart) {
 
 			restart = false;
 		}
@@ -434,9 +455,6 @@ int main() {
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		}
 
-		
-
-
 		else {
 
 			glBindVertexArray(VAO);
@@ -457,7 +475,7 @@ int main() {
 			tempoAtual = glfwGetTime();
 			animacaoPersonagem = tempoAtual - animacaoPersonagemContador;
 
-			if(pegouBola==0)
+			if (pegouBola == 0)
 				diamond.desenhar(1, 1, bola, 1, 1);
 
 			if (animacaoPersonagem >= 0.20) {
@@ -537,21 +555,40 @@ int main() {
 				}
 			}
 
-			diamond.desenhar(personagem.rowActual, personagem.colActual, pegouBola==0 ? tileSetPersonagem : tileSetPersonagemBola, personagem.offsetx, personagem.offsety);
+			diamond.desenhar(personagem.rowActual, personagem.colActual, pegouBola == 0 ? tileSetPersonagem : tileSetPersonagemBola, personagem.offsetx, personagem.offsety);
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 6; i++) {
 
 				switch (inimigos[i].movimento)
 				{
 				case 0:
 					if (inimigos[i].rowActual < limiteEsquerdaSuperior && inimigos[i].anterior > 0) {
 						inimigos[i].rowActual += velocidadeMovimento;
+
+						if (personagem.movimento == 0) {
+							inimigos[i].offsetx = 0;
+							inimigos[i].offsety = 0;							
+						}
+						else {							
+							inimigos[i].offsetx = 0.2;
+							inimigos[i].offsety = 0;
+						}
+						 
 					}
 					else {
 						inimigos[i].anterior = -1;
 					}
-					if (inimigos[i].rowActual > limiteDireitaInferior && inimigos[i].anterior < 0) {
+					if (inimigos[i].rowActual > limiteDireitaInferior&& inimigos[i].anterior < 0) {
 						inimigos[i].rowActual -= velocidadeMovimento;
+						
+						if (personagem.movimento == 0) {
+							inimigos[i].offsetx = 0;
+							inimigos[i].offsety = 0.4;
+						}
+						else {							
+							inimigos[i].offsetx = 0.2;
+							inimigos[i].offsety = 0.4;							
+						}
 					}
 					else {
 						inimigos[i].anterior = 1;
@@ -560,12 +597,14 @@ int main() {
 				case 1:
 					if (inimigos[i].colActual < limiteEsquerdaInferior && inimigos[i].anterior > 0) {
 						inimigos[i].colActual += velocidadeMovimento;
+
 					}
 					else {
 						inimigos[i].anterior = -1;
 					}
-					if (inimigos[i].colActual > limiteDireitaSuperior && inimigos[i].anterior < 0) {
+					if (inimigos[i].colActual > limiteDireitaSuperior&& inimigos[i].anterior < 0) {
 						inimigos[i].colActual -= velocidadeMovimento;
+
 					}
 					else {
 						inimigos[i].anterior = 1;
@@ -575,13 +614,15 @@ int main() {
 					if (inimigos[i].rowActual < limiteEsquerdaSuperior && inimigos[i].colActual < limiteEsquerdaInferior && inimigos[i].anterior > 0) {
 						inimigos[i].rowActual += velocidadeMovimento;
 						inimigos[i].colActual += velocidadeMovimento;
+
 					}
 					else {
 						inimigos[i].anterior = -1;
 					}
-					if (inimigos[i].rowActual > limiteDireitaSuperior && inimigos[i].colActual > limiteDireitaSuperior && inimigos[i].anterior < 0) {
+					if (inimigos[i].rowActual > limiteDireitaSuperior&& inimigos[i].colActual > limiteDireitaSuperior&& inimigos[i].anterior < 0) {
 						inimigos[i].rowActual -= velocidadeMovimento;
 						inimigos[i].colActual -= velocidadeMovimento;
+
 					}
 					else {
 						inimigos[i].anterior = 1;
@@ -592,32 +633,111 @@ int main() {
 						inimigos[i].rowActual += velocidadeMovimentoSeguidor;
 
 					}
+					
 					else if (inimigos[i].rowActual > personagem.rowActual) {
 						inimigos[i].rowActual -= velocidadeMovimentoSeguidor;
+
+						
 					}
 					if (inimigos[i].colActual < personagem.colActual) {
-						inimigos[i].colActual += velocidadeMovimentoSeguidor;
+						inimigos[i].colActual += velocidadeMovimentoSeguidor;						
 					}
 					else if (inimigos[i].colActual > personagem.colActual) {
 						inimigos[i].colActual -= velocidadeMovimentoSeguidor;
 					}
-					break;
-				}
-				diamond.desenhar(inimigos[i].rowActual, inimigos[i].colActual, inimigo, 1, 1);
 
-				if (diamond.checkCharactersColision(personagem, inimigos[i])) {
-					diamond.numLifes--;
-					diamond.restart(personagem, inimigos);
-					pegouBola = 0;
-				}
+					if (inimigos[i].rowActual+0.30 < personagem.rowActual && inimigos[i].colActual+0.30 < personagem.colActual) {
+						
+						if (personagem.movimento == 0) {
+							inimigos[i].offsetx = 0.6;
+							inimigos[i].offsety = 0.4;
+						}
+						else {
+							inimigos[i].offsetx = 0.8;
+							inimigos[i].offsety = 0.4;
+						}
+					}
+					else if(inimigos[i].rowActual+0.30 > personagem.rowActual && inimigos[i].colActual+0.30 > personagem.colActual){
+						if (personagem.movimento == 0) {
+							inimigos[i].offsetx = 0.6;
+							inimigos[i].offsety = 0.0;
+						}
+						else {
+							inimigos[i].offsetx = 0.8;
+							inimigos[i].offsety = 0.0;
+						}
+						
+					}
+					else if (inimigos[i].rowActual < personagem.rowActual && inimigos[i].colActual > personagem.colActual) {
+						if (personagem.movimento == 0) {
+							inimigos[i].offsetx = 0;
+							inimigos[i].offsety = 0;
+						}
+						else {
+							inimigos[i].offsetx = 0.2;
+							inimigos[i].offsety = 0;
+						}
+					}
+					else if (inimigos[i].rowActual > personagem.rowActual && inimigos[i].colActual < personagem.colActual) {
+						if (personagem.movimento == 0) {
+							inimigos[i].offsetx = 0;
+							inimigos[i].offsety = 0.4;
+						}
+						else {
+							inimigos[i].offsetx = 0.2;
+							inimigos[i].offsety = 0.4;
+						}
+						
+						
+					}
+					break;
 
 
 				
+				}
+				if (diamond.points==0) {
+					if (i < 4) {
+						diamond.desenhar(inimigos[i].rowActual, inimigos[i].colActual, inimigo, inimigos[i].offsetx, inimigos[i].offsety);
+					}
+
+					if (i < 4 && diamond.checkCharactersColision(personagem, inimigos[i])) {
+						diamond.numLifes--;
+						diamond.restart(personagem, inimigos);
+						pegouBola = 0;
+					}
+				}
+				else if (diamond.points == 1) {
+					if (i < 5) {
+						diamond.desenhar(inimigos[i].rowActual, inimigos[i].colActual, inimigo, inimigos[i].offsetx, inimigos[i].offsety);
+					}
+
+					if (i < 5 && diamond.checkCharactersColision(personagem, inimigos[i])) {
+						diamond.numLifes--;
+						diamond.restart(personagem, inimigos);
+						pegouBola = 0;
+					}
+					
+				}
+				else if (diamond.points == 2) {
+					diamond.desenhar(inimigos[i].rowActual, inimigos[i].colActual, inimigo, inimigos[i].offsetx, inimigos[i].offsety);
+
+					if (diamond.checkCharactersColision(personagem, inimigos[i])) {
+						diamond.numLifes--;
+						diamond.restart(personagem, inimigos);
+						pegouBola = 0;
+					}
+				}
+				
+
+				
+
+
+
 			}
 
-			
+
 		}
-		
+
 		glfwSwapBuffers(g_window);
 		glfwPollEvents();
 
@@ -632,7 +752,7 @@ int main() {
 
 }
 
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
