@@ -366,11 +366,11 @@ int main() {
 	double animacaoPersonagem;
 	double animacaoPersonagemContador = glfwGetTime();
 
-	//float velocidadeMovimento = 0.005f;
-	//float velocidadeMovimentoSeguidor = 0.002f;
-
+	float velocidadeMovimento = 0.005f;
+	float velocidadeMovimentoSeguidor = 0.002f;
+/*
 	float velocidadeMovimento = 0.001f;
-	float velocidadeMovimentoSeguidor = 0.00005f;
+	float velocidadeMovimentoSeguidor = 0.00005f;*/
 
 	bool restart = false;
 
@@ -520,12 +520,23 @@ int main() {
 			float row = personagem.rowActual;
 			float col = personagem.colActual;
 			diamond.tileWalking(col, row, direction, velocidadeMovimento);
-			bool colision = tileMapColision.checkColision(round(row), round(col));
+			bool colision = tileMapColision.checkColision(round(row), round(col), pegouBola);
 			if (!colision) {
 				personagem.rowActual = row;
 				personagem.colActual = col;
 			}
-			
+
+			bool point = false;
+			if (pegouBola == 1) {
+				point = tileMapColision.checkPoint(round(row), round(col));
+				if (point) {
+					diamond.points += 1;
+					diamond.restart(personagem, inimigos);
+					pegouBola = 0;
+					continue;
+				}
+			}
+
 			diamond.desenhar(personagem.rowActual, personagem.colActual, pegouBola==0 ? tileSetPersonagem : tileSetPersonagemBola, personagem.offsetx, personagem.offsety);
 
 			for (int i = 0; i < 4; i++) {

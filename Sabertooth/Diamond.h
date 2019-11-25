@@ -22,6 +22,7 @@ public:
 	int numLifes;
 	bool game_win;
 	bool game_over;
+	int points;
 	
 
 	Diamond() {}
@@ -37,6 +38,7 @@ public:
 		this->game_win = false;
 		this->game_over = false;
 		this->numLifes = 3;
+		this->points = 0;
 	}
 
 	void novo(GLuint shader_programme, TileMap background_map, TileSet tileSetLife)
@@ -49,6 +51,7 @@ public:
 		this->game_win = false;
 		this->game_over = false;
 		this->numLifes = 3;
+		this->points = 0;
 	}
 
 	int clique(double linha, double coluna, Personagem personagem) {
@@ -160,6 +163,10 @@ public:
 	}
 
 	void restart(Personagem& personagem, Personagem *inimigos) {
+		if (this->points >= 3) {
+			this->game_win = true;
+		}
+
 		inimigos[0].rowActual = 7;
 		inimigos[1].rowActual = 5;
 		inimigos[2].rowActual = 5;

@@ -99,11 +99,33 @@ public:
 		return offsets;
 	}
 
-	bool checkColision(int row, int col) {
-		
+	bool checkColision(int row, int col, int temBola) {
+
 		for (int i = 0; i < numLinhas; i++) {
 			for (int j = 0; j < numColunas; j++) {
 				if (this->idTiles[i][j] == 1) {
+					if (i == row && j == col) {
+						return true;
+					}
+				}
+				if (this->idTiles[i][j] == 2 && temBola == 0) {
+					if (i == row && j == col) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+	bool checkPoint(int row, int col) {
+
+		row = row + 0.1f;
+		col	= col+ 0.1f;
+		
+		for (int i = 0; i < numLinhas; i++) {
+			for (int j = 0; j < numColunas; j++) {
+				if (this->idTiles[i][j] == 2) {
 					if (i == row && j == col) {
 						return true;
 					}
